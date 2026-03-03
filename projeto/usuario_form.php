@@ -39,9 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nome  = $_POST["nome"];
     $email = $_POST["email"];
     $senha = $_POST["senha"];
-    $tipo = 'admin';
-
-
+    $usuario = 'aluno';
 
     // Verificar se o email já existe
     $sql = "SELECT * FROM usuarios WHERE email = '$email'";
@@ -57,10 +55,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             WHERE id = $id
             ";
             $sucesso = "Usuário atualizado com sucesso!";
+
         }else{
             $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
             $sql = "INSERT INTO usuarios (nome, email, senha, tipo) VALUES 
-            ('$nome', '$email', '$senhaHash', '$tipo')";
+            ('$nome', '$email', '$senhaHash', '$usuario')";
             $sucesso = "Usuário cadastrado com sucesso!";
 
         }
@@ -74,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 ?>
 
     <main class="flex-1 flex flex-col">
-        <!-- Mensagem de sucesso -->
+            <!-- Mensagem de sucesso -->
         <?php if (!empty($sucesso)): ?>
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
                 <?php echo $sucesso; ?>
@@ -101,16 +100,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <input type="hidden" value="<?=$editando['id'] ?? "" ?>" name="id"/>
                     <div class="mb-4">
                         <label class="form-label">Nome *</label>
-                        <input type="text" name="nome" class="form-input" required placeholder="digite seu nome...">
+                        <input type="text" value="<?=$editando['nome'] ?? "" ?>"  name="nome" class="form-input" required placeholder="digite seu nome...">
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Email *</label>
-                        <input type="text" name="email" class="form-input" required placeholder="digite seu email...">
+                        <input type="text" value="<?=$editando['email'] ?? "" ?>"  name="email" class="form-input" required placeholder="digite seu email...">
                     </div>
+
+                    <!-- Campo Senha -->
+                    <?php if(!$editando){ ?>
                     <div class="mb-4">
                         <label class="form-label">Senha *</label>
-                        <input type="password" name="senha" class="form-input" required placeholder="digite sua senha...">
+                        <input 
+                            type="password" 
+                            name="senha" 
+                            class="form-input" 
+                            required 
+                            placeholder="digite sua senha...">
                     </div>
+                    <?php } ?>
+
                     <div class="flex gap-2">
                         <button type="submit" class="bg-senai-blue text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-senai-blue-dark transition">💾 Salvar</button>
                         <a href="modulos.html" class="bg-gray-100 text-gray-600 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-gray-200 transition">Cancelar</a>

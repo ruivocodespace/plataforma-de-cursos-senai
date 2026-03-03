@@ -13,26 +13,10 @@ require_once "conexao.php";
 // Variáveis para mensagens
 $sucesso = "";
 $erro = "";
-$editando = NULL;
-
-
-if (isset($_GET["editar"])) {
-    $id = $_GET["editar"];
-    $sql = "SELECT * FROM usuarios WHERE id = '$id' AND tipo = 'aluno'";
-    $res = mysqli_query($conexao, $sql);
-    $editando = mysqli_fetch_assoc($res);
-}
-
-if (isset($_GET["excluir"])) {
-    $id = $_GET["excluir"];
-    $sql = "DELETE FROM usuarios WHERE id = '$id' AND tipo = 'aluno'";
-    $res = mysqli_query($conexao, $sql);
-}
 
 // Verificar se o formulário de cadastro foi enviado
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $id  = $_POST["id"];
     $nome  = $_POST["nome"];
     $email = $_POST["email"];
     $senha = $_POST["senha"];
@@ -95,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <a href="index.html" class="flex items-center gap-2 text-white font-extrabold text-lg">
                 🎓 <span>EAD SENAI</span>
             </a>
-            <a href="login.html" class="text-blue-200 hover:text-white text-sm transition">
+            <a href="login.php" class="text-blue-200 hover:text-white text-sm transition">
                 Já tem conta? <span class="underline font-semibold">Faça login</span>
             </a>
         </div>
@@ -103,21 +87,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <!-- CONTEÚDO -->
     <main class="flex-1 flex items-center justify-center px-4 py-12">
-        <!-- Mensagem de sucesso -->
-        <?php if (!empty($sucesso)): ?>
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-                <?php echo $sucesso; ?>
-            </div>
-        <?php endif; ?>
-
-        <!-- Mensagem de erro -->
-        <?php if (!empty($erro)): ?>
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-                <?php echo $erro; ?>
-            </div>
-        <?php endif; ?>
-        <div class="w-full max-w-md">
-
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
 
                 <!-- Topo -->
@@ -131,26 +100,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <div class="px-8 py-6">
 
-                    <!-- ALERTA DE ERRO (E-mail já cadastrado) -->
-                    <div class="bg-red-50 border border-red-300 text-red-700 rounded-lg p-3 mb-4 flex items-center gap-2 text-sm">
-                        <span class="font-bold">⚠</span>
-                        <span>Este e-mail já está cadastrado. <a href="login.html" class="underline font-semibold">Faça login.</a></span>
-                    </div>
+                                <!-- Mensagem de sucesso -->
+                    <?php if (!empty($sucesso)): ?>
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                            <?php echo $sucesso; ?>
+                        </div>
+                    <?php endif; ?>
 
-                    <!-- ALERTA DE SUCESSO -->
-                    <div class="bg-green-50 border border-green-300 text-green-700 rounded-lg p-3 mb-4 flex items-center gap-2 text-sm hidden">
-                        <span class="font-bold">✓</span>
-                        <span>Conta criada com sucesso! Faça seu login.</span>
-                    </div>
-
+                    <!-- Mensagem de erro -->
+                    <?php if (!empty($erro)): ?>
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                            <?php echo $erro; ?>
+                        </div>
+                    <?php endif; ?>
                     <!-- FORMULÁRIO -->
-                    <form action="login.html" method="get">
+                    <form action="cadastro.php" method="post">
 
                         <div class="mb-4">
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Nome Completo *</label>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">👤</span>
                                 <input
+                                    name="nome"
                                     type="text"
                                     placeholder="João da Silva"
                                     class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent"
@@ -163,6 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">✉</span>
                                 <input
+                                    name="email"
                                     type="email"
                                     placeholder="joao@email.com"
                                     class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent"
@@ -175,6 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔒</span>
                                 <input
+                                    name="senha"
                                     type="password"
                                     placeholder="••••••••"
                                     class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent"
@@ -187,6 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔒</span>
                                 <input
+                                    name="senha"
                                     type="password"
                                     placeholder="Repita a senha"
                                     class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent"
@@ -209,11 +183,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </a>
 
                 </div>
+                <p class="text-center text-xs text-gray-400 mt-5">
+                    <a href="index.html" class="hover:text-senai-blue transition" style="margin: 10px;">← Voltar à página inicial</a>
+                </p>
             </div>
 
-            <p class="text-center text-xs text-gray-400 mt-5">
-                <a href="index.html" class="hover:text-senai-blue transition">← Voltar à página inicial</a>
-            </p>
+            
 
         </div>
     </main>

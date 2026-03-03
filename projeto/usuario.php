@@ -19,10 +19,7 @@ $editando = NULL;
             </div>
             <div>
                 <a href="usuario_form.php" class="bg-senai-green text-white font-bold px-4 py-2.5 rounded-lg text-sm hover:bg-green-600 transition flex items-center gap-2" style="margin: 10px;">
-                    + Novo Usuario
-                </a>
-                <a href="curso_form.html" class="bg-senai-green text-white font-bold px-4 py-2.5 rounded-lg text-sm hover:bg-green-600 transition flex items-center gap-2" style="margin: 10px;">
-                    + Novo Aluno
+                    + Novo Admin
                 </a>
             </div>
         </div>

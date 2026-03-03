@@ -7,6 +7,46 @@ $sucesso = "";
 $erro = "";
 $editando = NULL;
 
+if (isset($_GET["excluir"])) {
+    $id = $_GET["excluir"];
+    $sql = "DELETE FROM usuarios WHERE id = '$id'";
+    $res = mysqli_query($conexao, $sql);
+}
+
+// Verificar se o formulário de cadastro foi enviado
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    $id = $_POST["id"];
+    $nome  = $_POST["nome"];
+    $email = $_POST["email"];
+    $senha = !$id ? $_POST["senha"] : '';
+
+    // Verificar se o email já existe
+    $sql = "SELECT * FROM usuarios WHERE email = '$email'";
+    $resultado = mysqli_query($conexao, $sql);
+
+    if (mysqli_num_rows($resultado) > 0) {
+        $erro = "Este email já está cadastrado.";
+    } else {
+        // Criptografar a senha
+        $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+
+        // Inserir o novo usuário
+        if($id){
+            $sql = "UPDATE usuario SET  nome = '$nome', email = '$email' WHERE id = $id";
+        }else{
+            $sql = "INSERT INTO usuarios (nome, email, senha) VALUES ('$nome', '$email', '$senhaHash')";
+        }
+
+        if (mysqli_query($conexao, $sql)) {
+            $sucesso = "Usuário cadastrado com sucesso!";
+        } else {
+            $erro = "Erro ao cadastrar usuário.";
+        }
+    }
+}
+
+
 ?>
     <!-- CONTEÚDO PRINCIPAL -->
     <main class="flex-1 flex flex-col">

@@ -25,19 +25,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $resultado = mysqli_query($conexao, $sql);
 
     // Verificar se encontrou o usuário
-    if ($usuarios = mysqli_fetch_assoc($resultado)) {
+    if ($usuario = mysqli_fetch_assoc($resultado)) {
 
         // Verificar se a senha está correta
-        if (password_verify($senha, $usuarios["senha"])) {
+        if (password_verify($senha, $usuario["senha"])) {
             // Guardar dados do usuário na sessão
-            $_SESSION["usuario_id"] = $usuarios["id"];
-            $_SESSION["usuario_nome"] = $usuarios["nome"];
-            $_SESSION["usuario_email"] = $usuarios["email"];
-            $_SESSION["usuario_tipo"] = $usuarios["tipo"];
-
+            $_SESSION["usuario_id"] = $usuario["id"];
+            $_SESSION["usuario_nome"] = $usuario["nome"];
+            $_SESSION["usuario_email"] = $usuario["email"];
+            $_SESSION["usuario_tipo"] = $usuario["tipo"];
 
             // Redirecionar para o dashboard
-            header("Location: cadastro_usuario.php");
+            header("Location: meus_cursos.php");
             exit;
         } else {
             $erro = "Email ou senha incorretos.";
@@ -104,12 +103,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </div>
 
                     <!-- FORMULÁRIO -->
-                    <form action="meus_cursos.html" method="get">
+                    <form action="login.php" method="post">
                         <div class="mb-4">
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">E-mail</label>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">✉</span>
                                 <input
+                                    name="email"
                                     type="email"
                                     placeholder="seu@email.com"
                                     class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-blue focus:border-transparent"
@@ -122,6 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔒</span>
                                 <input
+                                    name="senha"
                                     type="password"
                                     placeholder="••••••••"
                                     class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-blue focus:border-transparent"

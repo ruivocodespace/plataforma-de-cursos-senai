@@ -20,28 +20,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nome  = $_POST["nome"];
     $email = $_POST["email"];
     $senha = $_POST["senha"];
+    $senha = $_POST["senha"];
+    $confirmar = $_POST["confirmar_senha"];
     $tipo = 'aluno';
 
-
-
-    // Verificar se o email já existe
-    $sql = "SELECT * FROM usuarios WHERE email = '$email'";
-    $resultado = mysqli_query($conexao, $sql);
-
-    if (mysqli_num_rows($resultado) > 0) {
-        $erro = "Este email já está cadastrado.";
+    if ($senha !== $confirmar) {
+        $erro = "As senhas não coincidem.";
     }else{
+        // Verificar se o email já existe
+        $sql = "SELECT * FROM usuarios WHERE email = '$email'";
+        $resultado = mysqli_query($conexao, $sql);
+
+        if (mysqli_num_rows($resultado) > 0) {
+            $erro = "Este email já está cadastrado.";
+        }else {
+
             $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO usuarios (nome, email, senha, tipo) VALUES 
-            ('$nome', '$email', '$senhaHash', '$tipo')";
-            
-            $sucesso = "Usuário cadastrado com sucesso!";
-        }
 
-        if (!mysqli_query($conexao, $sql)) {
+            $sql = "INSERT INTO usuarios (nome, email, senha, tipo)
+                    VALUES ('$nome', '$email', '$senhaHash', '$tipo')";
 
-            $erro = "Erro ao cadastrar usuário.";
+            if (mysqli_query($conexao, $sql)) {
+                $sucesso = "Usuário cadastrado com sucesso!";
+            } else {
+                $erro = "Erro ao cadastrar usuário.";
+            }
         }
+    }
 }
 
 ?>
@@ -148,11 +153,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         </div>
 
                         <div class="mb-6">
-                            <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Confirmar Senha *</label>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                Confirmar Senha *
+                            </label>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔒</span>
                                 <input
-                                    name="senha"
+                                    name="confirmar_senha"
                                     type="password"
                                     placeholder="Repita a senha"
                                     class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent"

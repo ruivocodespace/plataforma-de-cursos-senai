@@ -28,28 +28,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $sql = "SELECT * FROM usuarios WHERE email = '$email'";
     $resultado = mysqli_query($conexao, $sql);
 
-    if (mysqli_num_rows($resultado) > 0 && !$editando) {
+    if (mysqli_num_rows($resultado) > 0) {
         $erro = "Este email já está cadastrado.";
-    } else {
-        if($id){
-            $sql = "UPDATE usuarios SET 
-            nome = '$nome',
-            email = '$email'
-            WHERE id = $id
-            ";
-            $sucesso = "Usuário atualizado com sucesso!";
-        }else{
+    }else{
             $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
             $sql = "INSERT INTO usuarios (nome, email, senha, tipo) VALUES 
             ('$nome', '$email', '$senhaHash', '$tipo')";
+            
             $sucesso = "Usuário cadastrado com sucesso!";
-
         }
 
         if (!mysqli_query($conexao, $sql)) {
+
             $erro = "Erro ao cadastrar usuário.";
         }
-    }
 }
 
 ?>
@@ -178,13 +170,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-xs text-gray-400">ou</span>
                     </div>
 
-                    <a href="login.html" class="block w-full border-2 border-senai-blue text-senai-blue font-bold py-2.5 rounded-lg text-sm text-center hover:bg-blue-50 transition">
+                    <a href="login.php" class="block w-full border-2 border-senai-blue text-senai-blue font-bold py-2.5 rounded-lg text-sm text-center hover:bg-blue-50 transition">
                         Já tenho conta — Fazer login
                     </a>
 
                 </div>
                 <p class="text-center text-xs text-gray-400 mt-5">
-                    <a href="index.html" class="hover:text-senai-blue transition" style="margin: 10px;">← Voltar à página inicial</a>
+                    <a href="index.php" class="hover:text-senai-blue transition" style="margin: 10px;">← Voltar à página inicial</a>
                 </p>
             </div>
 

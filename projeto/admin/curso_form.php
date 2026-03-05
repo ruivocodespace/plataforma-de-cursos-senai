@@ -39,13 +39,13 @@
             </div>
         </div>
         <nav class="flex-1 p-3 space-y-1">
-            <a href="index.html"      class="nav-link">📊 <span>Dashboard</span></a>
-            <a href="cursos.html"     class="nav-link active">📚 <span>Cursos</span></a>
-            <a href="modulos.html"    class="nav-link">📦 <span>Módulos</span></a>
-            <a href="aulas.html"      class="nav-link">🎬 <span>Aulas</span></a>
+            <a href="index.php"      class="nav-link">📊 <span>Dashboard</span></a>
+            <a href="cursos.php"     class="nav-link active">📚 <span>Cursos</span></a>
+            <a href="modulos.php"    class="nav-link">📦 <span>Módulos</span></a>
+            <a href="aulas.php"      class="nav-link">🎬 <span>Aulas</span></a>
             <div class="pt-2 border-t border-gray-700 mt-2">
-                <a href="../meus_cursos.html" class="nav-link">👁 <span>Ver site</span></a>
-                <a href="../login.html"       class="nav-link text-red-400 hover:text-red-300">🚪 <span>Sair</span></a>
+                <a href="../meus_cursos.php" class="nav-link">👁 <span>Ver site</span></a>
+                <a href="../login.php"       class="nav-link text-red-400 hover:text-red-300">🚪 <span>Sair</span></a>
             </div>
         </nav>
     </aside>
@@ -56,14 +56,14 @@
         <!-- TOPBAR -->
         <div class="bg-white border-b border-gray-200 px-6 py-4">
             <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
-                <a href="cursos.html" class="hover:text-senai-blue">Cursos</a>
+                <a href="cursos.php" class="hover:text-senai-blue">Cursos</a>
                 <span>›</span>
                 <span class="text-gray-700 font-semibold">Editar Curso</span>
             </div>
             <div class="flex items-center justify-between">
                 <h1 class="text-xl font-extrabold text-gray-800">Editar Curso</h1>
                 <!-- Para novo: "Cadastrar Novo Curso" sem o ?id na URL -->
-                <a href="cursos.html" class="text-sm text-gray-500 hover:text-senai-blue flex items-center gap-1 transition">← Voltar para Cursos</a>
+                <a href="cursos.php" class="text-sm text-gray-500 hover:text-senai-blue flex items-center gap-1 transition">← Voltar para Cursos</a>
             </div>
         </div>
 
@@ -74,7 +74,7 @@
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-xl shadow-sm p-6">
 
-                        <form action="cursos.html" method="post" enctype="multipart/form-data">
+                        <form action="cursos.php" method="post" enctype="multipart/form-data">
 
                             <!-- Campo oculto: id do curso (edição) -->
                             <input type="hidden" name="id" value="1">
@@ -141,7 +141,7 @@
                                 <button type="submit" class="bg-senai-blue hover:bg-senai-blue-dark text-white font-bold px-6 py-2.5 rounded-lg text-sm transition flex items-center gap-2">
                                     💾 Salvar Alterações
                                 </button>
-                                <a href="cursos.html" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-6 py-2.5 rounded-lg text-sm transition">
+                                <a href="cursos.php" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-6 py-2.5 rounded-lg text-sm transition">
                                     Cancelar
                                 </a>
                             </div>
@@ -170,7 +170,7 @@
                                 <span class="text-xs text-gray-400">3 aulas</span>
                             </li>
                         </ul>
-                        <a href="modulos.html" class="block mt-3 text-center border border-senai-blue text-senai-blue text-xs font-semibold py-2 rounded-lg hover:bg-blue-50 transition">
+                        <a href="modulos.php" class="block mt-3 text-center border border-senai-blue text-senai-blue text-xs font-semibold py-2 rounded-lg hover:bg-blue-50 transition">
                             Gerenciar Módulos
                         </a>
                     </div>

@@ -39,13 +39,13 @@
             </div>
         </div>
         <nav class="flex-1 p-3 space-y-1">
-            <a href="index.html"   class="nav-link">📊 <span>Dashboard</span></a>
-            <a href="cursos.html"  class="nav-link">📚 <span>Cursos</span></a>
-            <a href="modulos.html" class="nav-link">📦 <span>Módulos</span></a>
-            <a href="aulas.html"   class="nav-link active">🎬 <span>Aulas</span></a>
+            <a href="index.php"   class="nav-link">📊 <span>Dashboard</span></a>
+            <a href="cursos.php"  class="nav-link">📚 <span>Cursos</span></a>
+            <a href="modulos.php" class="nav-link">📦 <span>Módulos</span></a>
+            <a href="aulas.php"   class="nav-link active">🎬 <span>Aulas</span></a>
             <div class="pt-2 border-t border-gray-700 mt-2">
-                <a href="../meus_cursos.html" class="nav-link">👁 <span>Ver site</span></a>
-                <a href="../login.html"       class="nav-link text-red-400">🚪 <span>Sair</span></a>
+                <a href="../meus_cursos.php" class="nav-link">👁 <span>Ver site</span></a>
+                <a href="../login.php"       class="nav-link text-red-400">🚪 <span>Sair</span></a>
             </div>
         </nav>
     </aside>
@@ -54,8 +54,8 @@
         <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
             <div>
                 <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
-                    <a href="cursos.html" class="hover:text-senai-blue">Cursos</a> ›
-                    <a href="modulos.html" class="hover:text-senai-blue">Módulos</a> ›
+                    <a href="cursos.php" class="hover:text-senai-blue">Cursos</a> ›
+                    <a href="modulos.php" class="hover:text-senai-blue">Módulos</a> ›
                     <span class="text-gray-700 font-semibold">Introdução ao HTML</span> ›
                     <span>Aulas</span>
                 </div>
@@ -138,7 +138,7 @@
                             <button type="submit" class="bg-senai-blue text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-senai-blue-dark transition">
                                 Salvar Aula
                             </button>
-                            <a href="modulos.html" class="bg-gray-100 text-gray-600 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-gray-200 transition">Cancelar</a>
+                            <a href="modulos.php" class="bg-gray-100 text-gray-600 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-gray-200 transition">Cancelar</a>
                         </div>
                     </form>
                 </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Aula — Admin | EAD SENAI</title>
+    <title>Editar Módulo — Admin | EAD SENAI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -25,10 +25,10 @@
     <aside class="w-56 bg-gray-900 min-h-screen flex flex-col flex-shrink-0">
         <div class="px-4 py-5 border-b border-gray-700"><p class="text-white font-extrabold text-base">🎓 EAD SENAI</p><p class="text-gray-500 text-xs">Painel Administrativo</p></div>
         <nav class="flex-1 p-3 space-y-1 pt-4">
-            <a href="amdmin/index.php"   class="nav-link">📊 Dashboard</a>
+            <a href="index.php"   class="nav-link">📊 Dashboard</a>
             <a href="cursos.php"  class="nav-link">📚 Cursos</a>
-            <a href="modulos.php" class="nav-link">📦 Módulos</a>
-            <a href="admin/aulas.php"   class="nav-link active">🎬 Aulas</a>
+            <a href="modulos.php" class="nav-link active">📦 Módulos</a>
+            <a href="aulas.php"   class="nav-link">🎬 Aulas</a>
             <div class="pt-2 border-t border-gray-700 mt-2">
                 <a href="../login.php" class="nav-link text-red-400">🚪 Sair</a>
             </div>
@@ -37,47 +37,38 @@
     <main class="flex-1 flex flex-col">
         <div class="bg-white border-b border-gray-200 px-6 py-4">
             <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
+                <a href="cursos.php" class="hover:text-senai-blue">Cursos</a> ›
                 <a href="modulos.php" class="hover:text-senai-blue">Módulos</a> ›
-                <a href="admin/aulas.php" class="hover:text-senai-blue">Aulas</a> ›
-                <span class="text-gray-700 font-semibold">Editar Aula</span>
+                <span class="text-gray-700 font-semibold">Editar Módulo</span>
             </div>
-            <h1 class="text-xl font-extrabold text-gray-800">Editar Aula</h1>
+            <h1 class="text-xl font-extrabold text-gray-800">Editar Módulo</h1>
         </div>
         <div class="p-6 flex-1 max-w-xl">
             <div class="bg-white rounded-xl shadow-sm p-6">
-                <form action="admin/aulas.php" method="post">
-                    <input type="hidden" name="id" value="3">
+                <form action="modulos.php" method="post">
+                    <input type="hidden" name="id" value="1">
                     <div class="mb-4">
-                        <label class="form-label">Módulo *</label>
-                        <select name="modulo_id" class="form-input">
-                            <option value="1" selected>Módulo 1: Introdução ao HTML</option>
-                            <option value="2">Módulo 2: Estilizando com CSS</option>
+                        <label class="form-label">Curso</label>
+                        <select name="curso_id" class="form-input">
+                            <option value="1" selected>HTML e CSS do Zero</option>
+                            <option value="2">PHP para Iniciantes</option>
                         </select>
                     </div>
                     <div class="mb-4">
-                        <label class="form-label">Título da Aula *</label>
-                        <input type="text" name="titulo" class="form-input" value="Tags Essenciais do HTML">
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label">URL do Vídeo (embed)</label>
-                        <input type="url" name="video_url" class="form-input" value="https://www.youtube.com/embed/exemplo3" placeholder="https://www.youtube.com/embed/...">
-                        <p class="text-xs text-gray-400 mt-1">Use a URL de incorporação do YouTube ou Vimeo.</p>
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label">Duração</label>
-                        <input type="text" name="duracao" class="form-input" value="15:10" placeholder="Ex: 15:10">
+                        <label class="form-label">Título do Módulo *</label>
+                        <input type="text" name="titulo" class="form-input" value="Introdução ao HTML">
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Descrição (opcional)</label>
-                        <textarea name="descricao" rows="4" class="form-input resize-none">Nesta aula você aprenderá as principais tags HTML utilizadas na construção de páginas web...</textarea>
+                        <textarea name="descricao" rows="3" class="form-input resize-none">Fundamentos da linguagem HTML, estrutura de uma página e tags principais.</textarea>
                     </div>
                     <div class="mb-5">
                         <label class="form-label">Ordem</label>
-                        <input type="number" name="ordem" class="form-input" value="3" min="1">
+                        <input type="number" name="ordem" class="form-input" value="1" min="1">
                     </div>
                     <div class="flex gap-2">
-                        <button type="submit" class="bg-senai-blue text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-senai-blue-dark transition">💾 Salvar Aula</button>
-                        <a href="admin/aulas.php" class="bg-gray-100 text-gray-600 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-gray-200 transition">Cancelar</a>
+                        <button type="submit" class="bg-senai-blue text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-senai-blue-dark transition">💾 Salvar</button>
+                        <a href="modulos.php" class="bg-gray-100 text-gray-600 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-gray-200 transition">Cancelar</a>
                     </div>
                 </form>
             </div>

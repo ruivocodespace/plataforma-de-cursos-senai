@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!-- NAVBAR MÍNIMA -->
     <nav class="bg-senai-blue shadow-md">
         <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2 text-white font-extrabold text-lg">
+            <a href="index.php" class="flex items-center gap-2 text-white font-extrabold text-lg">
                 🎓 <span>EAD SENAI</span>
             </a>
             <a href="" class="text-blue-200 hover:text-white text-sm transition">
@@ -168,7 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
 
             <p class="text-center text-xs text-gray-400 mt-5">
-                <a href="index.html" class="hover:text-senai-blue transition">← Voltar à página inicial</a>
+                <a href="index.php" class="hover:text-senai-blue transition">← Voltar à página inicial</a>
             </p>
 
         </div>

@@ -1,15 +1,7 @@
 <?php
-// ============================================
-// Arquivo: login.php
-// Função: Tela de login e autenticação do usuário
-// ============================================
-
-// Iniciar a sessão
 session_start();
 
-// Incluir o arquivo de conexão com o banco
-require_once "/includes/logado.php";
-require_once "/includes/conexao.php";
+require_once "includes/conexao.php";
 // Variável para armazenar mensagem de erro
 $erro = "";
 
@@ -36,17 +28,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["usuario_tipo"] = $usuario["tipo"];
 
             if($_SESSION["usuario_tipo"] == 'admin'){
+                // Redirecionar para o dashboard
                 header("Location: admin/index.php");
                 exit;
             }else{
 
-            // Redirecionar para o dashboard
-            header("Location: meus_cursos.php");
-            exit;
+                // Redirecionar para o dashboard
+                header("Location: meus_cursos.php");
+                exit;
             }
         } else {
             $erro = "Email ou senha incorretos.";
         }
+    } else {
+        $erro = "Email ou senha incorretos.";
     }
 }
 ?>
@@ -73,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!-- NAVBAR MÍNIMA -->
     <nav class="bg-senai-blue shadow-md">
         <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2 text-white font-extrabold text-lg">
+            <a href="index.php" class="flex items-center gap-2 text-white font-extrabold text-lg">
                 🎓 <span>EAD SENAI</span>
             </a>
             <a href="cadastro.php" class="text-blue-200 hover:text-white text-sm transition">

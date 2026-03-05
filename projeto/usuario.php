@@ -1,7 +1,9 @@
 <?php
-session_start();
-require_once "../includes/logado.php";
-require_once "../includes/conexao.php";
+
+// Incluir o arquivo de conexão com o banco
+require_once "includes/logado.php";
+require_once "includes/conexao.php";
+
 $sucesso = "";
 $erro = "";
 $editando = NULL;

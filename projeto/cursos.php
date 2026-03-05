@@ -1,3 +1,12 @@
+<?php  
+
+// Incluir o arquivo de conexão com o banco
+require_once "includes/logado.php";
+require_once "includes/conexao.php";
+
+$nome = $_SESSION["usuario_nome"];
+
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -24,7 +33,7 @@
             <a href="cursos.html"   class="text-white text-sm font-semibold border-b-2 border-white pb-0.5">Cursos</a>
             <a href="meus_cursos.html" class="text-blue-200 hover:text-white text-sm transition">Meus Cursos</a>
             <div class="flex-1"></div>
-            <span class="text-sm text-blue-200">Olá, <strong class="text-white">João Silva</strong></span>
+            <span class="text-sm text-blue-200">Olá, <strong class="text-white"><?= htmlspecialchars($_SESSION["usuario_nome"]) ?> </strong></span>
             <a href="login.html" class="bg-senai-red text-white text-xs font-semibold px-3 py-1.5 rounded hover:bg-red-700 transition">Sair</a>
         </div>
     </nav>

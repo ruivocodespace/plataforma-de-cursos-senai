@@ -1,10 +1,11 @@
 <?php  
 
-session_start();
-require_once "../includes/logado.php";
-require_once "../includes/conexao.php";
+// Incluir o arquivo de conexão com o banco
+require_once "includes/logado.php";
+require_once "includes/conexao.php";
 
 $nome = $_SESSION["usuario_nome"];
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -28,7 +29,7 @@ $nome = $_SESSION["usuario_nome"];
     <!-- NAVBAR -->
     <nav class="bg-senai-blue shadow-md sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 py-3 flex items-center gap-6">
-            <a href="index.html" class="flex items-center gap-2 text-white font-extrabold text-lg">🎓 EAD SENAI</a>
+            <a href="index.php" class="flex items-center gap-2 text-white font-extrabold text-lg">🎓 EAD SENAI</a>
             <a href="cursos.php"      class="text-blue-200 hover:text-white text-sm transition">Cursos</a>
             <a href="meus_cursos.php" class="text-white text-sm font-semibold border-b-2 border-white pb-0.5">Meus Cursos</a>
             <div class="flex-1"></div>

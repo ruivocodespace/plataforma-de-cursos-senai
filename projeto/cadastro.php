@@ -1,14 +1,7 @@
 <?php
-// ============================================
-// Arquivo: usuarios_form.php
-// Função: Cadastro de usuários (área restrita)
-// ============================================
+require_once "includes/logado.php";
+require_once "includes/conexao.php";
 
-// Iniciar a sessão
-session_start();
-
-require_once "../includes/logado.php";
-require_once "../includes/conexao.php";
 // Variáveis para mensagens
 $sucesso = "";
 $erro = "";

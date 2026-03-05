@@ -49,7 +49,7 @@ $nome = $_SESSION["usuario_nome"];
                 <h1 class="text-2xl font-extrabold text-gray-800">Meus Cursos</h1>
                 <p class="text-sm text-gray-500 mt-1">Bem-vindo de volta, <strong><?= htmlspecialchars($_SESSION["usuario_nome"]) ?></strong>! Continue de onde parou.</p>
             </div>
-            <a href="cursos.html" class="border-2 border-senai-blue text-senai-blue text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-50 transition">
+            <a href="cursos.php" class="border-2 border-senai-blue text-senai-blue text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-50 transition">
                 + Explorar mais cursos
             </a>
         </div>
@@ -89,7 +89,7 @@ $nome = $_SESSION["usuario_nome"];
                             <h3 class="font-bold text-gray-800 text-base mt-1">HTML e CSS do Zero</h3>
                             <p class="text-xs text-gray-400 mt-0.5">Inscrito em 01/03/2025</p>
                         </div>
-                        <a href="curso.html" class="bg-senai-blue text-white text-xs font-bold px-5 py-2.5 rounded-lg hover:bg-senai-blue-dark transition flex-shrink-0">
+                        <a href="curso.php" class="bg-senai-blue text-white text-xs font-bold px-5 py-2.5 rounded-lg hover:bg-senai-blue-dark transition flex-shrink-0">
                             Continuar →
                         </a>
                     </div>
@@ -119,7 +119,7 @@ $nome = $_SESSION["usuario_nome"];
                             <h3 class="font-bold text-gray-800 text-base mt-1">PHP para Iniciantes</h3>
                             <p class="text-xs text-gray-400 mt-0.5">Inscrito em 28/02/2025</p>
                         </div>
-                        <a href="curso.html" class="border-2 border-senai-blue text-senai-blue text-xs font-bold px-5 py-2 rounded-lg hover:bg-blue-50 transition flex-shrink-0">
+                        <a href="curso.php" class="border-2 border-senai-blue text-senai-blue text-xs font-bold px-5 py-2 rounded-lg hover:bg-blue-50 transition flex-shrink-0">
                             Começar
                         </a>
                     </div>
@@ -143,7 +143,7 @@ $nome = $_SESSION["usuario_nome"];
         <div class="mt-10 bg-senai-blue rounded-2xl p-6 text-white text-center">
             <h3 class="font-extrabold text-lg mb-1">Quer aprender mais?</h3>
             <p class="text-blue-200 text-sm mb-4">Temos outros cursos disponíveis no catálogo.</p>
-            <a href="cursos.html" class="inline-block bg-white text-senai-blue font-bold px-6 py-2.5 rounded-lg text-sm hover:bg-blue-50 transition">
+            <a href="cursos.php" class="inline-block bg-white text-senai-blue font-bold px-6 py-2.5 rounded-lg text-sm hover:bg-blue-50 transition">
                 Ver todos os cursos
             </a>
         </div>

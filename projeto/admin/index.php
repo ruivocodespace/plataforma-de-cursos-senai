@@ -1,6 +1,6 @@
 <?php  
 
-session_start();
+
 require_once "../includes/logado.php";
 require_once "../includes/conexao.php";
 

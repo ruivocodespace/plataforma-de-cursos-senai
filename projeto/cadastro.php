@@ -1,5 +1,6 @@
 <?php
-require_once "includes/logado.php";
+
+session_start();
 require_once "includes/conexao.php";
 
 // Variáveis para mensagens
@@ -34,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if (mysqli_query($conexao, $sql)) {
                 $sucesso = "Usuário cadastrado com sucesso!";
+                header("Location: meus_cursos.php");
             } else {
                 $erro = "Erro ao cadastrar usuário.";
             }
@@ -65,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!-- NAVBAR -->
     <nav class="bg-senai-blue shadow-md">
         <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2 text-white font-extrabold text-lg">
+            <a href="index.php" class="flex items-center gap-2 text-white font-extrabold text-lg">
                 🎓 <span>EAD SENAI</span>
             </a>
             <a href="login.php" class="text-blue-200 hover:text-white text-sm transition">

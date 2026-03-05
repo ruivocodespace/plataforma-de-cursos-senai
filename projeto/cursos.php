@@ -29,12 +29,12 @@ $nome = $_SESSION["usuario_nome"];
     <!-- NAVBAR -->
     <nav class="bg-senai-blue shadow-md sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 py-3 flex items-center gap-6">
-            <a href="index.html" class="flex items-center gap-2 text-white font-extrabold text-lg">🎓 EAD SENAI</a>
-            <a href="cursos.html"   class="text-white text-sm font-semibold border-b-2 border-white pb-0.5">Cursos</a>
-            <a href="meus_cursos.html" class="text-blue-200 hover:text-white text-sm transition">Meus Cursos</a>
+            <a href="index.php" class="flex items-center gap-2 text-white font-extrabold text-lg">🎓 EAD SENAI</a>
+            <a href="cursos.php"   class="text-white text-sm font-semibold border-b-2 border-white pb-0.5">Cursos</a>
+            <a href="meus_cursos.php" class="text-blue-200 hover:text-white text-sm transition">Meus Cursos</a>
             <div class="flex-1"></div>
             <span class="text-sm text-blue-200">Olá, <strong class="text-white"><?= htmlspecialchars($_SESSION["usuario_nome"]) ?> </strong></span>
-            <a href="login.html" class="bg-senai-red text-white text-xs font-semibold px-3 py-1.5 rounded hover:bg-red-700 transition">Sair</a>
+            <a href="login.php" class="bg-senai-red text-white text-xs font-semibold px-3 py-1.5 rounded hover:bg-red-700 transition">Sair</a>
         </div>
     </nav>
 
@@ -50,7 +50,7 @@ $nome = $_SESSION["usuario_nome"];
     <div class="max-w-6xl mx-auto px-6 pt-5">
         <div class="bg-green-50 border border-green-300 text-green-700 rounded-lg p-3 flex items-center gap-2 text-sm">
             <span class="font-bold text-lg">✓</span>
-            <span>Inscrição realizada com sucesso! Acesse <a href="meus_cursos.html" class="underline font-semibold">Meus Cursos</a> para começar.</span>
+            <span>Inscrição realizada com sucesso! Acesse <a href="meus_cursos.php" class="underline font-semibold">Meus Cursos</a> para começar.</span>
         </div>
     </div>
 
@@ -87,7 +87,7 @@ $nome = $_SESSION["usuario_nome"];
                             <div class="bg-senai-green h-2 rounded-full" style="width:33%"></div>
                         </div>
                     </div>
-                    <a href="curso.html" class="bg-senai-green text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-green-600 transition">
+                    <a href="curso.php" class="bg-senai-green text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-green-600 transition">
                         Continuar Curso →
                     </a>
                 </div>
@@ -107,7 +107,7 @@ $nome = $_SESSION["usuario_nome"];
                     <p class="text-sm text-gray-500 mb-4 flex-1">
                         Introdução ao desenvolvimento back-end com PHP e MySQL. Do zero ao primeiro sistema.
                     </p>
-                    <a href="cursos.html" class="bg-senai-blue text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-senai-blue-dark transition">
+                    <a href="cursos.php" class="bg-senai-blue text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-senai-blue-dark transition">
                         Inscrever-se Grátis
                     </a>
                 </div>
@@ -127,7 +127,7 @@ $nome = $_SESSION["usuario_nome"];
                     <p class="text-sm text-gray-500 mb-4 flex-1">
                         Domine os fundamentos e recursos modernos do JavaScript para a web.
                     </p>
-                    <a href="cursos.html" class="bg-senai-blue text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-senai-blue-dark transition">
+                    <a href="cursos.php" class="bg-senai-blue text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-senai-blue-dark transition">
                         Inscrever-se Grátis
                     </a>
                 </div>

@@ -1,3 +1,14 @@
+<?php  
+
+session_start();
+require_once "../includes/logado.php";
+require_once "../includes/conexao.php";
+
+$nome = $_SESSION["usuario_nome"];
+$tipo = $_SESSION["usuario_tipo"];
+$email = $_SESSION["usuario_email"];
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -32,20 +43,21 @@
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-xs font-bold">A</div>
                 <div>
-                    <p class="text-white text-xs font-semibold">Administrador</p>
-                    <p class="text-gray-500 text-xs">admin@ead.com</p>
+                    <p class="text-white text-xs font-semibold"><?= htmlspecialchars($_SESSION["usuario_nome"]) ?></p>
+                    <p class="text-white text-xs font-semibold"><?= htmlspecialchars($_SESSION["usuario_tipo"]) ?></p>
+                    <p class="text-gray-500 text-xs"><?= htmlspecialchars($_SESSION["usuario_email"]) ?></p>
                 </div>
             </div>
         </div>
         <!-- Menu -->
         <nav class="flex-1 p-3 space-y-1">
-            <a href="index.html"      class="nav-link active">📊 <span>Dashboard</span></a>
-            <a href="cursos.html"     class="nav-link">📚 <span>Cursos</span></a>
-            <a href="modulos.html"    class="nav-link">📦 <span>Módulos</span></a>
-            <a href="aulas.html"      class="nav-link">🎬 <span>Aulas</span></a>
+            <a href="index.php"      class="nav-link active">📊 <span>Dashboard</span></a>
+            <a href="cursos.php"     class="nav-link">📚 <span>Cursos</span></a>
+            <a href="modulos.php"    class="nav-link">📦 <span>Módulos</span></a>
+            <a href="aulas.php"      class="nav-link">🎬 <span>Aulas</span></a>
             <div class="pt-2 border-t border-gray-700 mt-2">
                 <a href="../meus_cursos.html" class="nav-link">👁 <span>Ver site</span></a>
-                <a href="../login.html"       class="nav-link text-red-400 hover:text-red-300">🚪 <span>Sair</span></a>
+                <a href="../index.php"       class="nav-link text-red-400 hover:text-red-300">🚪 <span>Sair</span></a>
             </div>
         </nav>
     </aside>

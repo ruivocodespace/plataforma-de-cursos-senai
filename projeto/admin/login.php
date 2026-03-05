@@ -7,9 +7,9 @@
 // Iniciar a sessão
 session_start();
 
-// Incluir o arquivo de conexão com o banco
-require_once "/includes/logado.php";
-require_once "/includes/conexao.php";
+require_once "../includes/logado.php";
+require_once "../includes/conexao.php";
+
 // Variável para armazenar mensagem de erro
 $erro = "";
 
@@ -35,18 +35,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["usuario_email"] = $usuario["email"];
             $_SESSION["usuario_tipo"] = $usuario["tipo"];
 
-            if($_SESSION["usuario_tipo"] == 'admin'){
-                header("Location: admin/index.php");
-                exit;
+            if($_SESSION["usuario_tipo"] !== 'admin'){
+                $erro = 'Login não autorizado';
             }else{
 
             // Redirecionar para o dashboard
-            header("Location: meus_cursos.php");
+            header("Location: index.php");
             exit;
             }
         } else {
             $erro = "Email ou senha incorretos.";
         }
+    } else {
+        $erro = "Email ou senha incorretos.";
     }
 }
 ?>
@@ -76,8 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <a href="index.html" class="flex items-center gap-2 text-white font-extrabold text-lg">
                 🎓 <span>EAD SENAI</span>
             </a>
-            <a href="cadastro.php" class="text-blue-200 hover:text-white text-sm transition">
-                Não tem conta? <span class="underline font-semibold">Cadastre-se</span>
+            <a href="" class="text-blue-200 hover:text-white text-sm transition">
+                <span class="underline font-semibold">Ajuda</span>
             </a>
         </div>
     </nav>
@@ -161,13 +162,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <!-- INFO ADMIN -->
             <div class="mt-4 bg-yellow-50 border border-yellow-300 rounded-lg p-3 text-xs text-gray-600 text-center">
-                <strong>Admin?</strong> Use <span class="font-mono bg-white px-1 rounded">admin@ead.com</span> /
-                <span class="font-mono bg-white px-1 rounded">admin123</span> →
-                <a href="admin/login.php" class="text-senai-blue underline font-semibold">Painel Admin</a>
+                <strong>Problemas com o login?</strong> <span class="font-mono bg-white px-1 rounded"></span> /
+                <span class="font-mono bg-white px-1 rounded">Ligue para a central de atendimento<br></span>
+                <span class="text-senai-blue underline font-semibold">(11) 4002-8922</span>
             </div>
 
             <p class="text-center text-xs text-gray-400 mt-5">
-                <a href="index.php" class="hover:text-senai-blue transition">← Voltar à página inicial</a>
+                <a href="index.html" class="hover:text-senai-blue transition">← Voltar à página inicial</a>
             </p>
 
         </div>

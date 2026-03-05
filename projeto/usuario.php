@@ -1,8 +1,7 @@
 <?php
 session_start();
-require_once "conexao.php";
-require_once "includes/menu.php";
-
+require_once "../includes/logado.php";
+require_once "../includes/conexao.php";
 $sucesso = "";
 $erro = "";
 $editando = NULL;

@@ -5,8 +5,6 @@
 // ============================================
 
 // Iniciar a sessão
-session_start();
-
 require_once "../includes/logado.php";
 require_once "../includes/conexao.php";
 
@@ -96,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <span class="text-3xl">🔐</span>
                     </div>
                     <h1 class="text-white font-extrabold text-xl">Entrar na Plataforma</h1>
-                    <p class="text-blue-200 text-sm mt-1">Informe suas credenciais para acessar</p>
+                    <p class="text-blue-200 text-sm mt-1">Faça login com seu usuário admin</p>
                 </div>
 
                 <div class="px-8 py-6">

@@ -1,3 +1,15 @@
+<?php  
+
+
+require_once "../includes/logado.php";
+require_once "../includes/conexao.php";
+
+$nome = $_SESSION["usuario_nome"];
+$tipo = $_SESSION["usuario_tipo"];
+$email = $_SESSION["usuario_email"];
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

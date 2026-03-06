@@ -5,7 +5,6 @@ require_once "../includes/logado.php";
 require_once "../includes/conexao.php";
 
 $nome = $_SESSION["usuario_nome"];
-$tipo = $_SESSION["usuario_tipo"];
 $email = $_SESSION["usuario_email"];
 ?>
 
@@ -44,7 +43,6 @@ $email = $_SESSION["usuario_email"];
                 <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-xs font-bold">A</div>
                 <div>
                     <p class="text-white text-xs font-semibold"><?= htmlspecialchars($_SESSION["usuario_nome"]) ?></p>
-                    <p class="text-white text-xs font-semibold"><?= htmlspecialchars($_SESSION["usuario_tipo"]) ?></p>
                     <p class="text-gray-500 text-xs"><?= htmlspecialchars($_SESSION["usuario_email"]) ?></p>
                 </div>
             </div>
@@ -71,7 +69,16 @@ $email = $_SESSION["usuario_email"];
                 <h1 class="text-xl font-extrabold text-gray-800">Dashboard</h1>
                 <p class="text-sm text-gray-500">Visão geral do sistema EAD</p>
             </div>
-            <span class="text-xs text-gray-400">Segunda-feira, 01 de Março de 2025</span>
+            <div class="text-xs text-gray-400">
+                <p><span id="data-texto"></span></p>
+
+                <script src="../includes/script.js"></script>
+                <script>
+                    // Chama a função que criamos anteriormente
+                    mostrarDataCompleta('data-texto');
+                </script>
+            </div>
+
         </div>
 
         <div class="p-6 flex-1">

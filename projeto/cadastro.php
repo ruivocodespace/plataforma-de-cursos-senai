@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <div class="px-8 py-6">
 
-                                <!-- Mensagem de sucesso -->
+                    <!-- Mensagem de sucesso -->
                     <?php if (!empty($sucesso)): ?>
                         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
                             <?php echo $sucesso; ?>

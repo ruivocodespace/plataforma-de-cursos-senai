@@ -78,7 +78,7 @@
                             <p class="text-xs text-gray-400">⏱ 08:20 &nbsp;·&nbsp; <span class="text-blue-500 underline text-xs">ver vídeo</span></p>
                         </div>
                         <div class="flex gap-1.5">
-                            <a href="admin/aula_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏ Editar</a>
+                            <a href="aula_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏ Editar</a>
                             <button class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑</button>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                             <p class="text-xs text-gray-400">⏱ 12:45 &nbsp;·&nbsp; <span class="text-blue-500 underline text-xs">ver vídeo</span></p>
                         </div>
                         <div class="flex gap-1.5">
-                            <a href="admin/aula_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏ Editar</a>
+                            <a href="aula_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏ Editar</a>
                             <button class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑</button>
                         </div>
                     </div>

@@ -1,3 +1,74 @@
+<?php
+
+require_once "../includes/conexao.php";
+require_once "../includes/logado.php";
+
+// Variáveis para mensagens
+$sucesso = "";
+$erro = "";
+$editando = NULL;
+
+
+if (isset($_GET["editar"])) {
+    $id = $_GET["editar"];
+    $sql = "SELECT * FROM aulas WHERE id = '$id'";
+    $res = mysqli_query($conexao, $sql);
+    $editando = mysqli_fetch_assoc($res);
+}
+
+if (isset($_GET["excluir"])) {
+    $id = $_GET["excluir"];
+    $sql = "UPDATE aulas SET ativo = 0 WHERE id = '$id'";
+    $res = mysqli_query($conexao, $sql);
+}
+
+// Verificar se o formulário de cadastro foi enviado
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $id = $_POST["id"];
+    $modulo_id = $_POST["modulo_id"];
+    $titulo  = $_POST["titulo"];
+    $video_url = $_POST["video_url"];
+    $duracao = $_POST["duracao"];
+    $descricao = $_POST["descricao"];
+    $ordem = $_POST["ordem"];
+
+    // Verificar se o email já existe
+    $sql = "SELECT * FROM aulas WHERE titulo = '$titulo'";
+    $resultado = mysqli_query($conexao, $sql);
+
+    if (mysqli_num_rows($resultado) > 0 && !$editando) {
+        $erro = "Esta aula já está cadastrado.";
+    } else {
+        if($id) {
+            $sql = "UPDATE aulas SET
+            modulo_id = '$modulo_id',
+            titulo = '$titulo',
+            video_url = '$video_url',
+            duracao = '$duracao',
+            descricao = '$descricao',
+            ordem = '$ordem'
+            WHERE id = $id
+            ";
+            $sucesso = "Aula atualizada com sucesso!";
+
+            
+
+        }else{
+            $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+            $sql = "INSERT INTO aulas (modulo_id, titulo, video_url, duracao, descricao, ordem) VALUES 
+            ('$modulo_id', '$titulo', '$video_url', '$duracao', '$descricao', '$ordem')";
+            $sucesso = "Aula cadastrada com sucesso!";
+            
+        }
+
+        if (!mysqli_query($conexao, $sql)) {
+            $erro = "Erro ao cadastrar aula.";
+        }
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -35,18 +106,31 @@
         </nav>
     </aside>
     <main class="flex-1 flex flex-col">
+        <!-- Mensagem de sucesso -->
+        <?php if (!empty($sucesso)): ?>
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                <?php echo $sucesso; ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Mensagem de erro -->
+        <?php if (!empty($erro)): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                <?php echo $erro; ?>
+            </div>
+        <?php endif; ?>
         <div class="bg-white border-b border-gray-200 px-6 py-4">
             <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
                 <a href="modulos.php" class="hover:text-senai-blue">Módulos</a> ›
-                <a href="admin/aulas.php" class="hover:text-senai-blue">Aulas</a> ›
+                <a href="aulas.php" class="hover:text-senai-blue">Aulas</a> ›
                 <span class="text-gray-700 font-semibold">Editar Aula</span>
             </div>
             <h1 class="text-xl font-extrabold text-gray-800">Editar Aula</h1>
         </div>
         <div class="p-6 flex-1 max-w-xl">
             <div class="bg-white rounded-xl shadow-sm p-6">
-                <form action="admin/aulas.php" method="post">
-                    <input type="hidden" name="id" value="3">
+                <form action="aula_form.php" method="post">
+                <input type="hidden" value="<?=$editando['id'] ?? "" ?>" name="id"/>
                     <div class="mb-4">
                         <label class="form-label">Módulo *</label>
                         <select name="modulo_id" class="form-input">
@@ -56,28 +140,28 @@
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Título da Aula *</label>
-                        <input type="text" name="titulo" class="form-input" value="Tags Essenciais do HTML">
+                        <input type="text" name="titulo" value="<?=$editando['titulo'] ?? "" ?>" class="form-input" value="Tags Essenciais do HTML">
                     </div>
                     <div class="mb-4">
                         <label class="form-label">URL do Vídeo (embed)</label>
-                        <input type="url" name="video_url" class="form-input" value="https://www.youtube.com/embed/exemplo3" placeholder="https://www.youtube.com/embed/...">
+                        <input type="url" name="video_url" value="<?=$editando['video_url'] ?? "" ?>" class="form-input" value="https://www.youtube.com/embed/exemplo3" placeholder="https://www.youtube.com/embed/...">
                         <p class="text-xs text-gray-400 mt-1">Use a URL de incorporação do YouTube ou Vimeo.</p>
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Duração</label>
-                        <input type="text" name="duracao" class="form-input" value="15:10" placeholder="Ex: 15:10">
+                        <input type="text" name="duracao" value="<?=$editando['duracao'] ?? "" ?>" class="form-input" value="15:10" placeholder="Ex: 15:10">
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Descrição (opcional)</label>
-                        <textarea name="descricao" rows="4" class="form-input resize-none">Nesta aula você aprenderá as principais tags HTML utilizadas na construção de páginas web...</textarea>
+                        <textarea name="descricao" rows="4" class="form-input resize-none" value="<?=$editando['descricao'] ?? "" ?>"></textarea>
                     </div>
                     <div class="mb-5">
                         <label class="form-label">Ordem</label>
-                        <input type="number" name="ordem" class="form-input" value="3" min="1">
+                        <input type="number" name="ordem" value="<?=$editando['ordem'] ?? "" ?>" class="form-input" value="3" min="1">
                     </div>
                     <div class="flex gap-2">
                         <button type="submit" class="bg-senai-blue text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-senai-blue-dark transition">💾 Salvar Aula</button>
-                        <a href="admin/aulas.php" class="bg-gray-100 text-gray-600 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-gray-200 transition">Cancelar</a>
+                        <a href="aulas.php" class="bg-gray-100 text-gray-600 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-gray-200 transition">Cancelar</a>
                     </div>
                 </form>
             </div>

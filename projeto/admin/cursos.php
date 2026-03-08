@@ -8,11 +8,36 @@ $nome = $_SESSION["usuario_nome"];
 $email = $_SESSION["usuario_email"];
 
 // BUSCAR CURSOS
-$sqlCursos = "SELECT * FROM cursos ORDER BY id DESC";
+$sqlCursos = "
+SELECT 
+c.id,
+c.titulo,
+c.descricao,
+c.ativo,
+c.criado_em,
+
+COUNT(DISTINCT m.id) AS total_modulos,
+COUNT(DISTINCT a.id) AS total_aulas,
+COUNT(DISTINCT i.id) AS total_inscricoes
+
+FROM cursos c
+
+LEFT JOIN modulos m 
+ON m.curso_id = c.id
+
+LEFT JOIN aulas a 
+ON a.modulo_id = m.id
+
+LEFT JOIN inscricoes i 
+ON i.curso_id = c.id
+
+GROUP BY c.id
+
+ORDER BY c.id DESC
+";
+
 $resultCursos = mysqli_query($conexao, $sqlCursos);
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -36,10 +61,33 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
 </head>
 <body class="bg-gray-100 min-h-screen flex">
 
-    <!--SIDEBAR + TOPBAR -->
-    <?php
-    require_once "includes/menu.php";
-    ?>
+    <!-- SIDEBAR -->
+    <aside class="w-56 bg-gray-900 min-h-screen flex flex-col flex-shrink-0">
+        <div class="px-4 py-5 border-b border-gray-700">
+            <p class="text-white font-extrabold text-base">🎓 EAD SENAI</p>
+            <p class="text-gray-500 text-xs mt-0.5">Painel Administrativo</p>
+        </div>
+        <div class="px-4 py-3 border-b border-gray-700">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-xs font-bold">A</div>
+                <div>
+                    <p class="text-white text-xs font-semibold"><?= htmlspecialchars($nome) ?></p>
+                    <p class="text-gray-500 text-xs"><?= htmlspecialchars($email) ?></p>
+                </div>
+            </div>
+        </div>
+        <nav class="flex-1 p-3 space-y-1">
+            <a href="index.php"class="nav-link">📊 <span>Dashboard</span></a>
+            <a href="cursos.php"class="nav-link active">📚 <span>Cursos</span></a>
+            <a href="modulos.php"class="nav-link">📦 <span>Módulos</span></a>
+            <a href="aulas.php"class="nav-link">🎬 <span>Aulas</span></a>
+            <div class="pt-2 border-t border-gray-700 mt-2">
+                <a href="../meus_cursos.php"class="nav-link">👁 <span>Ver site</span></a>
+                <a href="../login.php"class="nav-link text-red-400 hover:text-red-300">🚪 <span>Sair</span></a>
+            </div>
+        </nav>
+    </aside>
+
     <!-- CONTEÚDO PRINCIPAL -->
     <main class="flex-1 flex flex-col">
 
@@ -78,89 +126,79 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
                             <th class="px-4 py-3 text-center">Ações</th>
                         </tr>
                     </thead>
+
                     <tbody class="divide-y divide-gray-100">
+                    <?php while ($u = mysqli_fetch_assoc($resultCursos)): ?>
+                        <tr class="border-b border-gray-200 hover:bg-gray-50">
+                            <!-- ID -->
+                            <td class="px-4 py-3">
+                                <?php echo $u["id"]; ?>
+                            </td>
 
-<?php while($curso = mysqli_fetch_assoc($resultCursos)): ?>
+                            <!-- Titulo -->
+                            <td class="px-4 py-3">
+                                <?php echo $u["titulo"]; ?>
+                            </td>
 
-<tr class="hover:bg-gray-50 transition">
+                            <!-- Modulos -->
+                            <td class="px-4 py-3 text-center">
+                                <?php echo $u["total_modulos"]; ?>
+                            </td>
 
-<td class="px-4 py-3 text-gray-400 font-mono text-xs">
-    <?= $curso["id"] ?>
-</td>
+                            <!-- Aulas -->
+                            <td class="px-4 py-3 text-center">
+                                <?php echo $u["total_aulas"]; ?>
+                            </td>
 
-<td class="px-4 py-3">
-<div class="flex items-center gap-3">
+                            <!-- Inscrições -->
+                            <td class="px-4 py-3 text-center">
+                                <?php echo $u["total_inscricoes"]; ?>
+                            </td>
 
-<div class="w-10 h-10 bg-senai-blue rounded-lg flex items-center justify-center flex-shrink-0">
-<span class="text-lg">📚</span>
-</div>
+                            <!-- Status -->
+                            <td class="px-4 py-3 text-center">
+                                <?php if($u["ativo"]): ?>
+                                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">
+                                        Ativo
+                                    </span>
+                                <?php else: ?>
+                                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">
+                                        Inativo
+                                    </span>
+                                <?php endif; ?>
+                            </td>
 
-<div>
-<p class="font-semibold text-gray-800">
-<?= $curso["nome"] ?>
-</p>
+                            <!-- Data -->
+                            <td class="px-4 py-3 text-center">
+                                <?php echo date("d/m/Y", strtotime($u["criado_em"])); ?>
+                            </td>
 
-<p class="text-xs text-gray-400 mt-0.5">
-<?= $curso["descricao"] ?>
-</p>
+                            <!-- Ações -->
+                            <td class="px-4 py-3 text-center">
+                                <div class="flex items-center justify-center gap-1.5">
 
-</div>
-</div>
-</td>
+                                    <a href="modulos.php?curso_id=<?php echo $u["id"]; ?>"
+                                    class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-senai-blue-dark transition">
+                                    📦 Módulos
+                                    </a>
 
-<td class="px-4 py-3 text-center text-gray-600 font-semibold">-</td>
-<td class="px-4 py-3 text-center text-gray-600 font-semibold">-</td>
-<td class="px-4 py-3 text-center text-gray-600 font-semibold">-</td>
+                                    <a href="curso_form.php?id=<?php echo $u["id"]; ?>"
+                                    class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-yellow-600 transition">
+                                    ✏ Editar
+                                    </a>
 
-<td class="px-4 py-3 text-center">
-
-<?php if($curso["ativo"] == 1): ?>
-
-<span class="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">
-Ativo
-</span>
-
-<?php else: ?>
-
-<span class="bg-gray-100 text-gray-500 text-xs font-bold px-2.5 py-1 rounded-full">
-Inativo
-</span>
-
-<?php endif; ?>
-
-</td>
-
-<td class="px-4 py-3 text-center text-xs text-gray-400">
-<?= date("d/m/Y", strtotime($curso["criado_em"])) ?>
-</td>
-
-<td class="px-4 py-3 text-center">
-
-<div class="flex items-center justify-center gap-1.5">
-
-<a href="modulos.php?curso=<?= $curso["id"] ?>" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-senai-blue-dark transition">
-📦 Módulos
-</a>
-
-<a href="curso_form.php?id=<?= $curso["id"] ?>" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-yellow-600 transition">
-✏ Editar
-</a>
-
-<a onclick="return confirm('Excluir este curso?')" href="curso_excluir.php?id=<?= $curso["id"] ?>" class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-red-700 transition">
-🗑
-</a>
-
-</div>
-
-</td>
-
-</tr>
-
-<?php endwhile; ?>
-
-</tbody>
+                                    <a href="excluir_curso.php?id=<?php echo $u["id"]; ?>"
+                                    onclick="return confirm('Excluir este curso?')"
+                                    class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-red-700 transition">
+                                    🗑
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                    </tbody>
                 </table>
-
+            </div>
                 <!-- RODAPÉ DA TABELA -->
                 <div class="border-t border-gray-100 px-4 py-3 flex items-center justify-between bg-gray-50">
                     <p class="text-xs text-gray-400">Exibindo 3 de 3 cursos</p>

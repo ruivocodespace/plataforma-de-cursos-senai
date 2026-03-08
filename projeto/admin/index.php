@@ -3,7 +3,10 @@ session_start();
 require_once "../includes/logado.php";
 require_once "../includes/conexao.php";
 
-// Buscar totais do sistema
+// ==============================
+// TOTAIS DO SISTEMA
+// ==============================
+
 $sql = "SELECT
 (SELECT COUNT(*) FROM cursos) AS cursos,
 (SELECT COUNT(*) FROM modulos) AS modulos,
@@ -14,12 +17,30 @@ $sql = "SELECT
 $result = mysqli_query($conexao, $sql);
 $totais = mysqli_fetch_assoc($result);
 
-$totalCursos = $totais['cursos'];
-$totalModulos = $totais['modulos'];
-$totalAulas = $totais['aulas'];
-$totalInscricoes = $totais['inscricoes'];
+$totalCursos = $totais['cursos'] ?? 0;
+$totalModulos = $totais['modulos'] ?? 0;
+$totalAulas = $totais['aulas'] ?? 0;
+$totalInscricoes = $totais['inscricoes'] ?? 0;
 
-$sqlCursos = "SELECT * FROM cursos LIMIT 5";
+
+// ==============================
+// LISTA DE CURSOS (DASHBOARD)
+// ==============================
+
+$sqlCursos = "
+SELECT 
+c.id,
+c.titulo,
+c.ativo,
+COUNT(DISTINCT m.id) AS total_modulos,
+COUNT(a.id) AS total_aulas
+FROM cursos c
+LEFT JOIN modulos m ON m.curso_id = c.id
+LEFT JOIN aulas a ON a.modulo_id = m.id
+GROUP BY c.id
+LIMIT 5
+";
+
 $resultCursos = mysqli_query($conexao, $sqlCursos);
 ?>
 
@@ -176,14 +197,18 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
                             <?php
                             while ($u = mysqli_fetch_assoc($resultCursos)): ?>
                                 <tr class="border-b border-gray-200 hover:bg-gray-50">
-                                    <td class="px-4 py-3"><?php echo $u["id"]; ?></td>
-                                    <td class="px-4 py-3"><?php echo $u["total_cursos"]; ?></td>
+                                    <td class="px-4 py-3"><?php echo $u["titulo"]; ?></td>
                                     <td class="px-4 py-3"><?php echo $u["total_modulos"]; ?></td>
                                     <td class="px-4 py-3"><?php echo $u["total_aulas"]; ?></td>
-                                    <td class="px-4 py-3 text-gray-500"><?php echo $u["ativo"]; ?></td>
-                                    <td class="px-4 py-3">
-                                        <a class="editar" href="?editar=<?=$u["id"]; ?>">Editar</a><br>
-                                        <a onclick="return confirm('Tem certeza disso?')" class="excluir" href="?excluir=<?=$u["id"]; ?>">Excluir</a>
+                                    <td class="px-4 py-3 text-center"><?php if($u["ativo"]): ?>
+                                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">
+                                        Ativo
+                                        </span>
+                                        <?php else: ?>
+                                            <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">
+                                            Inativo
+                                        </span>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
@@ -191,9 +216,7 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
                         </tbody>
                     </table>
                 </div>
-
             </div>
-
         </div>
     </main>
 

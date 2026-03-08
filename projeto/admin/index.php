@@ -3,6 +3,24 @@ session_start();
 require_once "../includes/logado.php";
 require_once "../includes/conexao.php";
 
+// Buscar totais do sistema
+$sql = "SELECT
+(SELECT COUNT(*) FROM cursos) AS cursos,
+(SELECT COUNT(*) FROM modulos) AS modulos,
+(SELECT COUNT(*) FROM aulas) AS aulas,
+(SELECT COUNT(*) FROM inscricoes) AS inscricoes
+";
+
+$result = mysqli_query($conexao, $sql);
+$totais = mysqli_fetch_assoc($result);
+
+$totalCursos = $totais['cursos'];
+$totalModulos = $totais['modulos'];
+$totalAulas = $totais['aulas'];
+$totalInscricoes = $totais['inscricoes'];
+
+$sqlCursos = "SELECT * FROM cursos LIMIT 5";
+$resultCursos = mysqli_query($conexao, $sqlCursos);
 ?>
 
 <!DOCTYPE html>
@@ -56,40 +74,57 @@ require_once "../includes/conexao.php";
         <div class="p-6 flex-1">
 
             <!-- CARDS DE TOTAIS -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-blue">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-2xl">📚</span>
-                        <span class="text-xs text-gray-400 bg-blue-50 px-2 py-0.5 rounded">Total</span>
-                    </div>
-                    <p class="text-3xl font-extrabold text-senai-blue">3</p>
-                    <p class="text-sm text-gray-500 mt-1">Cursos cadastrados</p>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+
+            <!-- CURSOS -->
+            <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-blue">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-2xl">📚</span>
+                    <span class="text-xs text-gray-400 bg-blue-50 px-2 py-0.5 rounded">Total</span>
                 </div>
-                <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-orange">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-2xl">📦</span>
-                        <span class="text-xs text-gray-400 bg-orange-50 px-2 py-0.5 rounded">Total</span>
-                    </div>
-                    <p class="text-3xl font-extrabold text-senai-orange">5</p>
-                    <p class="text-sm text-gray-500 mt-1">Módulos cadastrados</p>
-                </div>
-                <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-red">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-2xl">🎬</span>
-                        <span class="text-xs text-gray-400 bg-red-50 px-2 py-0.5 rounded">Total</span>
-                    </div>
-                    <p class="text-3xl font-extrabold text-senai-red">9</p>
-                    <p class="text-sm text-gray-500 mt-1">Aulas cadastradas</p>
-                </div>
-                <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-green">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-2xl">👥</span>
-                        <span class="text-xs text-gray-400 bg-green-50 px-2 py-0.5 rounded">Total</span>
-                    </div>
-                    <p class="text-3xl font-extrabold text-senai-green">24</p>
-                    <p class="text-sm text-gray-500 mt-1">Inscrições realizadas</p>
-                </div>
+                <p class="text-3xl font-extrabold text-senai-blue">
+                    <?= $totalCursos ?>
+                </p>
+                <p class="text-sm text-gray-500 mt-1">Cursos cadastrados</p>
             </div>
+
+            <!-- MODULOS -->
+            <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-orange">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-2xl">📦</span>
+                    <span class="text-xs text-gray-400 bg-orange-50 px-2 py-0.5 rounded">Total</span>
+                </div>
+                <p class="text-3xl font-extrabold text-senai-orange">
+                    <?= $totalModulos ?>
+                </p>
+                <p class="text-sm text-gray-500 mt-1">Módulos cadastrados</p>
+            </div>
+
+            <!-- AULAS -->
+            <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-red">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-2xl">🎬</span>
+                    <span class="text-xs text-gray-400 bg-red-50 px-2 py-0.5 rounded">Total</span>
+                </div>
+                <p class="text-3xl font-extrabold text-senai-red">
+                    <?= $totalAulas ?>
+                </p>
+                <p class="text-sm text-gray-500 mt-1">Aulas cadastradas</p>
+            </div>
+
+            <!-- INSCRIÇÕES -->
+            <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-green">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-2xl">👥</span>
+                    <span class="text-xs text-gray-400 bg-green-50 px-2 py-0.5 rounded">Total</span>
+                </div>
+                <p class="text-3xl font-extrabold text-senai-green">
+                    <?= $totalInscricoes ?>
+                </p>
+                <p class="text-sm text-gray-500 mt-1">Inscrições realizadas</p>
+            </div>
+
+        </div>
 
             <!-- AÇÕES RÁPIDAS + TABELA -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -138,24 +173,21 @@ require_once "../includes/conexao.php";
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            <tr>
-                                <td class="py-2.5 font-medium text-gray-700">🌐 HTML e CSS do Zero</td>
-                                <td class="py-2.5 text-center text-gray-500">3</td>
-                                <td class="py-2.5 text-center text-gray-500">9</td>
-                                <td class="py-2.5 text-center"><span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full">Ativo</span></td>
-                            </tr>
-                            <tr>
-                                <td class="py-2.5 font-medium text-gray-700">🐘 PHP para Iniciantes</td>
-                                <td class="py-2.5 text-center text-gray-500">2</td>
-                                <td class="py-2.5 text-center text-gray-500">5</td>
-                                <td class="py-2.5 text-center"><span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full">Ativo</span></td>
-                            </tr>
-                            <tr>
-                                <td class="py-2.5 font-medium text-gray-700">⚡ JavaScript Moderno</td>
-                                <td class="py-2.5 text-center text-gray-500">4</td>
-                                <td class="py-2.5 text-center text-gray-500">12</td>
-                                <td class="py-2.5 text-center"><span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full">Ativo</span></td>
-                            </tr>
+                            <?php
+                            while ($u = mysqli_fetch_assoc($resultCursos)): ?>
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="px-4 py-3"><?php echo $u["id"]; ?></td>
+                                    <td class="px-4 py-3"><?php echo $u["cursos"]; ?></td>
+                                    <td class="px-4 py-3"><?php echo $u["modulos"]; ?></td>
+                                    <td class="px-4 py-3"><?php echo $u["aulas"]; ?></td>
+                                    <td class="px-4 py-3 text-gray-500"><?php echo $u["ativo"]; ?></td>
+                                    <td class="px-4 py-3">
+                                        <a class="editar" href="?editar=<?=$u["id"]; ?>">Editar</a><br>
+                                        <a onclick="return confirm('Tem certeza disso?')" class="excluir" href="?excluir=<?=$u["id"]; ?>">Excluir</a>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        
                         </tbody>
                     </table>
                 </div>

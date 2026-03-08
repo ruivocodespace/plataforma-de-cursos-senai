@@ -1,11 +1,8 @@
 <?php
-// ============================================
-// Arquivo: login.php
-// Função: Tela de login e autenticação do usuário
-// ============================================
 
 // Iniciar a sessão
-require_once "../includes/logado.php";
+session_start();
+
 require_once "../includes/conexao.php";
 
 // Variável para armazenar mensagem de erro

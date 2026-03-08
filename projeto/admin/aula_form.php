@@ -1,7 +1,7 @@
 <?php
-
-require_once "../includes/conexao.php";
+session_start();
 require_once "../includes/logado.php";
+require_once "../includes/conexao.php";
 
 // Variáveis para mensagens
 $sucesso = "";
@@ -93,18 +93,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex">
-    <aside class="w-56 bg-gray-900 min-h-screen flex flex-col flex-shrink-0">
-        <div class="px-4 py-5 border-b border-gray-700"><p class="text-white font-extrabold text-base">🎓 EAD SENAI</p><p class="text-gray-500 text-xs">Painel Administrativo</p></div>
-        <nav class="flex-1 p-3 space-y-1 pt-4">
-            <a href="amdmin/index.php"   class="nav-link">📊 Dashboard</a>
-            <a href="cursos.php"  class="nav-link">📚 Cursos</a>
-            <a href="modulos.php" class="nav-link">📦 Módulos</a>
-            <a href="admin/aulas.php"   class="nav-link active">🎬 Aulas</a>
-            <div class="pt-2 border-t border-gray-700 mt-2">
-                <a href="../login.php" class="nav-link text-red-400">🚪 Sair</a>
-            </div>
-        </nav>
-    </aside>
+    
+    <!--SIDEBAR + TOPBAR -->
+    <?php
+    require_once "includes/menu.php";
+    ?>
     <main class="flex-1 flex flex-col">
         <!-- Mensagem de sucesso -->
         <?php if (!empty($sucesso)): ?>

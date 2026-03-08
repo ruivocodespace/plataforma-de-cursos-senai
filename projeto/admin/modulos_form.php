@@ -1,15 +1,73 @@
-<?php  
-
-
+<?php
+session_start();
 require_once "../includes/logado.php";
 require_once "../includes/conexao.php";
 
-$nome = $_SESSION["usuario_nome"];
-$tipo = $_SESSION["usuario_tipo"];
-$email = $_SESSION["usuario_email"];
+// Variáveis para mensagens
+$sucesso = "";
+$erro = "";
+$editando = NULL;
+
+
+if (isset($_GET["editar"])) {
+    $id = $_GET["editar"];
+    $sql = "SELECT * FROM aulas WHERE id = '$id'";
+    $res = mysqli_query($conexao, $sql);
+    $editando = mysqli_fetch_assoc($res);
+}
+
+if (isset($_GET["excluir"])) {
+    $id = $_GET["excluir"];
+    $sql = "UPDATE aulas SET ativo = 0 WHERE id = '$id'";
+    $res = mysqli_query($conexao, $sql);
+}
+
+// Verificar se o formulário de cadastro foi enviado
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $id = $_POST["id"];
+    $modulo_id = $_POST["modulo_id"];
+    $titulo  = $_POST["titulo"];
+    $video_url = $_POST["video_url"];
+    $duracao = $_POST["duracao"];
+    $descricao = $_POST["descricao"];
+    $ordem = $_POST["ordem"];
+
+    // Verificar se o email já existe
+    $sql = "SELECT * FROM aulas WHERE titulo = '$titulo'";
+    $resultado = mysqli_query($conexao, $sql);
+
+    if (mysqli_num_rows($resultado) > 0 && !$editando) {
+        $erro = "Esta aula já está cadastrado.";
+    } else {
+        if($id) {
+            $sql = "UPDATE aulas SET
+            modulo_id = '$modulo_id',
+            titulo = '$titulo',
+            video_url = '$video_url',
+            duracao = '$duracao',
+            descricao = '$descricao',
+            ordem = '$ordem'
+            WHERE id = $id
+            ";
+            $sucesso = "Aula atualizada com sucesso!";
+
+            
+
+        }else{
+            $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+            $sql = "INSERT INTO aulas (modulo_id, titulo, video_url, duracao, descricao, ordem) VALUES 
+            ('$modulo_id', '$titulo', '$video_url', '$duracao', '$descricao', '$ordem')";
+            $sucesso = "Aula cadastrada com sucesso!";
+            
+        }
+
+        if (!mysqli_query($conexao, $sql)) {
+            $erro = "Erro ao cadastrar aula.";
+        }
+    }
+}
+
 ?>
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -34,18 +92,10 @@ $email = $_SESSION["usuario_email"];
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex">
-    <aside class="w-56 bg-gray-900 min-h-screen flex flex-col flex-shrink-0">
-        <div class="px-4 py-5 border-b border-gray-700"><p class="text-white font-extrabold text-base">🎓 EAD SENAI</p><p class="text-gray-500 text-xs">Painel Administrativo</p></div>
-        <nav class="flex-1 p-3 space-y-1 pt-4">
-            <a href="index.php"   class="nav-link">📊 Dashboard</a>
-            <a href="cursos.php"  class="nav-link">📚 Cursos</a>
-            <a href="modulos.php" class="nav-link active">📦 Módulos</a>
-            <a href="aulas.php"   class="nav-link">🎬 Aulas</a>
-            <div class="pt-2 border-t border-gray-700 mt-2">
-                <a href="../login.php" class="nav-link text-red-400">🚪 Sair</a>
-            </div>
-        </nav>
-    </aside>
+    <!--SIDEBAR + TOPBAR -->
+    <?php
+    require_once "includes/menu.php";
+    ?>>
     <main class="flex-1 flex flex-col">
         <div class="bg-white border-b border-gray-200 px-6 py-4">
             <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">

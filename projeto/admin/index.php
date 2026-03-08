@@ -177,9 +177,9 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
                             while ($u = mysqli_fetch_assoc($resultCursos)): ?>
                                 <tr class="border-b border-gray-200 hover:bg-gray-50">
                                     <td class="px-4 py-3"><?php echo $u["id"]; ?></td>
-                                    <td class="px-4 py-3"><?php echo $u["cursos"]; ?></td>
-                                    <td class="px-4 py-3"><?php echo $u["modulos"]; ?></td>
-                                    <td class="px-4 py-3"><?php echo $u["aulas"]; ?></td>
+                                    <td class="px-4 py-3"><?php echo $u["total_cursos"]; ?></td>
+                                    <td class="px-4 py-3"><?php echo $u["total_modulos"]; ?></td>
+                                    <td class="px-4 py-3"><?php echo $u["total_aulas"]; ?></td>
                                     <td class="px-4 py-3 text-gray-500"><?php echo $u["ativo"]; ?></td>
                                     <td class="px-4 py-3">
                                         <a class="editar" href="?editar=<?=$u["id"]; ?>">Editar</a><br>

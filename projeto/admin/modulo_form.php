@@ -32,7 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $descricao = $_POST["descricao"];
     $ordem = $_POST["ordem"];
 
-    // Verificar se o email já existe
     $sql = "SELECT * FROM aulas WHERE titulo = '$titulo'";
     $resultado = mysqli_query($conexao, $sql);
 
@@ -73,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Módulo — Admin | EAD SENAI</title>
+    <title>Adicionar Módulo — Admin | EAD SENAI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -95,19 +94,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!--SIDEBAR + TOPBAR -->
     <?php
     require_once "includes/menu.php";
-    ?>>
+    ?>
     <main class="flex-1 flex flex-col">
         <div class="bg-white border-b border-gray-200 px-6 py-4">
             <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
                 <a href="cursos.php" class="hover:text-senai-blue">Cursos</a> ›
                 <a href="modulos.php" class="hover:text-senai-blue">Módulos</a> ›
-                <span class="text-gray-700 font-semibold">Editar Módulo</span>
+                <span class="text-gray-700 font-semibold">Adicionar Módulo</span>
             </div>
-            <h1 class="text-xl font-extrabold text-gray-800">Editar Módulo</h1>
+            <h1 class="text-xl font-extrabold text-gray-800">Adicionar Módulo</h1>
         </div>
         <div class="p-6 flex-1 max-w-xl">
             <div class="bg-white rounded-xl shadow-sm p-6">
-                <form action="modulos.php" method="post">
+                <form action="modulo_form.php" method="post">
                     <input type="hidden" name="id" value="1">
                     <div class="mb-4">
                         <label class="form-label">Curso</label>

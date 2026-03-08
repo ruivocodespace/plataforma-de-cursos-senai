@@ -1,3 +1,73 @@
+<?php
+session_start();
+require_once "../includes/logado.php";
+require_once "../includes/conexao.php";
+
+// Variáveis para mensagens
+$sucesso = "";
+$erro = "";
+$editando = NULL;
+
+
+if (isset($_GET["editar"])) {
+    $id = $_GET["editar"];
+    $sql = "SELECT * FROM cursos WHERE id = '$id'";
+    $res = mysqli_query($conexao, $sql);
+    $editando = mysqli_fetch_assoc($res);
+}
+
+if (isset($_GET["excluir"])) {
+    $id = $_GET["excluir"];
+    $sql = "UPDATE cursos SET ativo = 0 WHERE id = '$id'";
+    $res = mysqli_query($conexao, $sql);
+}
+
+// Verificar se o formulário de cadastro foi enviado
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $id = $_POST["id"];
+    $titulo = $_POST["modulo_id"];
+    $titulo  = $_POST["titulo"];
+    $video_url = $_POST["video_url"];
+    $duracao = $_POST["duracao"];
+    $descricao = $_POST["descricao"];
+    $ordem = $_POST["ordem"];
+
+    $sql = "SELECT * FROM aulas WHERE titulo = '$titulo'";
+    $resultado = mysqli_query($conexao, $sql);
+
+    if (mysqli_num_rows($resultado) > 0 && !$editando) {
+        $erro = "Esta aula já está cadastrado.";
+    } else {
+        if($id) {
+            $sql = "UPDATE aulas SET
+            modulo_id = '$modulo_id',
+            titulo = '$titulo',
+            video_url = '$video_url',
+            duracao = '$duracao',
+            descricao = '$descricao',
+            ordem = '$ordem'
+            WHERE id = $id
+            ";
+            $sucesso = "Aula atualizada com sucesso!";
+
+            
+
+        }else{
+            $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+            $sql = "INSERT INTO aulas (modulo_id, titulo, video_url, duracao, descricao, ordem) VALUES 
+            ('$modulo_id', '$titulo', '$video_url', '$duracao', '$descricao', '$ordem')";
+            $sucesso = "Aula cadastrada com sucesso!";
+            
+        }
+
+        if (!mysqli_query($conexao, $sql)) {
+            $erro = "Erro ao cadastrar aula.";
+        }
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

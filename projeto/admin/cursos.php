@@ -104,12 +104,13 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
 
         <div class="p-6 flex-1">
 
-            <!-- MENSAGEM DE SUCESSO -->
+            <!-- MENSAGEM DE SUCESSO 
             <div class="bg-green-50 border border-green-300 text-green-700 rounded-lg p-3 mb-5 flex items-center gap-2 text-sm">
                 <span class="font-bold text-base">✓</span>
                 <span>Curso excluído com sucesso!</span>
                 <button class="ml-auto text-green-400 hover:text-green-700 text-lg leading-none">×</button>
             </div>
+            -->
 
             <!-- TABELA DE CURSOS -->
             <div class="bg-white rounded-xl shadow-sm overflow-hidden">
@@ -181,13 +182,13 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
                                     class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-senai-blue-dark transition">
                                     📦 Módulos
                                     </a>
-
-                                    <a href="curso_form.php?id=<?php echo $u["id"]; ?>"
+                                    
+                                    <a href="curso_form.php?editar=<?php echo $u["id"]; ?>"
                                     class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-yellow-600 transition">
                                     ✏ Editar
                                     </a>
 
-                                    <a href="excluir_curso.php?id=<?php echo $u["id"]; ?>"
+                                    <a href="curso_delete.php?id=<?php echo $u["id"]; ?>"
                                     onclick="return confirm('Excluir este curso?')"
                                     class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-red-700 transition">
                                     🗑

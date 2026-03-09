@@ -16,56 +16,91 @@ if (isset($_GET["editar"])) {
     $editando = mysqli_fetch_assoc($res);
 }
 
-if (isset($_GET["excluir"])) {
-    $id = $_GET["excluir"];
-    $sql = "UPDATE cursos SET ativo = 0 WHERE id = '$id'";
-    $res = mysqli_query($conexao, $sql);
-}
-
-// Verificar se o formulário de cadastro foi enviado
+// Verificar se o formulário foi enviado
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $id = $_POST["id"];
-    $titulo = $_POST["modulo_id"];
-    $titulo  = $_POST["titulo"];
-    $video_url = $_POST["video_url"];
-    $duracao = $_POST["duracao"];
-    $descricao = $_POST["descricao"];
-    $ordem = $_POST["ordem"];
 
-    $sql = "SELECT * FROM aulas WHERE titulo = '$titulo'";
-    $resultado = mysqli_query($conexao, $sql);
+    $id = $_POST["id"] ?? null;
+    $titulo  = $_POST["titulo"] ?? "";
+    $descricao  = $_POST["descricao"] ?? "";
+    $ativo = $_POST["ativo"] ?? 1;
 
-    if (mysqli_num_rows($resultado) > 0 && !$editando) {
-        $erro = "Esta aula já está cadastrado.";
-    } else {
-        if($id) {
-            $sql = "UPDATE aulas SET
-            modulo_id = '$modulo_id',
-            titulo = '$titulo',
-            video_url = '$video_url',
-            duracao = '$duracao',
-            descricao = '$descricao',
-            ordem = '$ordem'
-            WHERE id = $id
-            ";
-            $sucesso = "Aula atualizada com sucesso!";
+    // LÓGICA DE UPLOAD DA IMAGEM DE CAPA
+    // Mantém a capa antiga se estiver editando
+    $nome_capa = isset($editando['capa']) ? $editando['capa'] : "";
 
-            
+    // Caminho da pasta de uploads
+    $pasta_destino = "../uploads/cursos/";
 
-        }else{
-            $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO aulas (modulo_id, titulo, video_url, duracao, descricao, ordem) VALUES 
-            ('$modulo_id', '$titulo', '$video_url', '$duracao', '$descricao', '$ordem')";
-            $sucesso = "Aula cadastrada com sucesso!";
-            
+    // Verifica se foi enviada uma nova imagem
+    if (isset($_FILES['capa']) && $_FILES['capa']['size'] > 0) {
+
+        // Pega extensão
+        $extensao = strtolower(pathinfo($_FILES['capa']['name'], PATHINFO_EXTENSION));
+        $extensoes_permitidas = ['jpg','jpeg','png','webp'];
+
+        if (!in_array($extensao, $extensoes_permitidas)) {
+            $erro = "Formato de imagem inválido.";
+        } else {
+            // Gera nome único para evitar conflitos
+            $novo_nome_imagem = uniqid() . "." . $extensao;
+
+            // Move imagem
+            if (move_uploaded_file($_FILES['capa']['tmp_name'], $pasta_destino . $novo_nome_imagem)) {
+                $nome_capa = $novo_nome_imagem;
+            } else {
+                $erro = "Erro ao salvar a imagem.";
+            }
+        }
+    }
+
+    // Se não houve erro no upload
+    if (empty($erro)) {
+
+        // Verificar se já existe curso com mesmo título
+        if ($id) {
+            $sql_busca = "SELECT * FROM cursos WHERE titulo = '$titulo' AND id != '$id'";
+        } else {
+            $sql_busca = "SELECT * FROM cursos WHERE titulo = '$titulo'";
         }
 
-        if (!mysqli_query($conexao, $sql)) {
-            $erro = "Erro ao cadastrar aula.";
+        $resultado_busca = mysqli_query($conexao, $sql_busca);
+
+        if (mysqli_num_rows($resultado_busca) > 0) {
+
+            $erro = "Já existe um curso cadastrado com este título.";
+
+        } else {
+
+            if ($id) {
+
+                // UPDATE
+                $sql_salvar = "UPDATE cursos SET 
+                               titulo = '$titulo', 
+                               descricao = '$descricao',
+                               capa = '$nome_capa',
+                               ativo = '$ativo'
+                               WHERE id = '$id'";
+
+            } else {
+
+                // INSERT
+                $sql_salvar = "INSERT INTO cursos (titulo, descricao, capa, ativo) 
+                               VALUES ('$titulo', '$descricao', '$nome_capa', '$ativo')";
+            }
+
+            if (mysqli_query($conexao, $sql_salvar)) {
+
+                header("Location: cursos.php");
+                exit;
+
+            } else {
+
+                $erro = "Erro ao salvar no banco: " . mysqli_error($conexao);
+
+            }
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -93,24 +128,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body class="bg-gray-100 min-h-screen flex">
 
-    <!--SIDEBAR + TOPBAR -->
+    <!--SIDEBAR -->
     <?php
     require_once "includes/menu.php";
     ?>
 
     <!-- CONTEÚDO -->
     <main class="flex-1 flex flex-col">
-
         <!-- TOPBAR -->
         <div class="bg-white border-b border-gray-200 px-6 py-4">
             <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
                 <a href="cursos.php" class="hover:text-senai-blue">Cursos</a>
                 <span>›</span>
-                <span class="text-gray-700 font-semibold">Editar Curso</span>
+                <span class="text-gray-700 font-semibold"><?= $editando ? "Editar Curso" : "Cadastrar Novo Curso"; ?></span>
             </div>
             <div class="flex items-center justify-between">
-                <h1 class="text-xl font-extrabold text-gray-800">Editar Curso</h1>
-                <!-- Para novo: "Cadastrar Novo Curso" sem o ?id na URL -->
+                <h1 class="text-xl font-extrabold text-gray-800"><?= $editando ? "Editar Curso" : "Cadastrar Novo Curso"; ?></h1>
                 <a href="cursos.php" class="text-sm text-gray-500 hover:text-senai-blue flex items-center gap-1 transition">← Voltar para Cursos</a>
             </div>
         </div>
@@ -122,10 +155,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-xl shadow-sm p-6">
 
-                        <form action="cursos.php" method="post" enctype="multipart/form-data">
-
+                        <form action="curso_form.php" method="post" enctype="multipart/form-data">
                             <!-- Campo oculto: id do curso (edição) -->
-                            <input type="hidden" name="id" value="1">
+                            <input type="hidden" name="id" value="<?= $editando ? $editando['id'] : '' ?>">
 
                             <!-- TÍTULO -->
                             <div class="mb-5">
@@ -135,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     name="titulo"
                                     class="form-input"
                                     placeholder="Ex: HTML e CSS do Zero"
-                                    value="HTML e CSS do Zero"
+                                    value="<?= $editando ? $editando['titulo'] : '' ?>"
                                 >
                                 <p class="text-xs text-gray-400 mt-1">Use um título claro e direto. Máx. 150 caracteres.</p>
                             </div>
@@ -148,7 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     rows="4"
                                     class="form-input resize-none"
                                     placeholder="Descreva o curso, o que o aluno vai aprender..."
-                                >Aprenda a criar páginas web profissionais do início ao fim, com projetos práticos e exemplos reais.</textarea>
+                                ><?= $editando ? $editando['descricao'] : '' ?></textarea>
                                 <p class="text-xs text-gray-400 mt-1">Seja claro sobre o conteúdo e o público-alvo do curso.</p>
                             </div>
 
@@ -174,11 +206,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 <label class="form-label">Status do Curso</label>
                                 <div class="flex gap-4">
                                     <label class="flex items-center gap-2 cursor-pointer">
-                                        <input type="radio" name="ativo" value="1" checked class="accent-senai-green">
+                                        <input type="radio" name="ativo" value="1" <?= $editando && $editando['ativo'] ? 'checked' : '' ?> class="accent-senai-green">
                                         <span class="text-sm text-gray-700">Ativo — Visível para os alunos</span>
                                     </label>
                                     <label class="flex items-center gap-2 cursor-pointer">
-                                        <input type="radio" name="ativo" value="0" class="accent-gray-400">
+                                        <input type="radio" name="ativo" value="0" <?= $editando && !$editando['ativo'] ? 'checked' : '' ?> class="accent-gray-400">
                                         <span class="text-sm text-gray-500">Inativo — Oculto para os alunos</span>
                                     </label>
                                 </div>
@@ -238,10 +270,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <div class="bg-red-50 border border-red-200 rounded-xl p-4">
                         <h4 class="font-bold text-senai-red text-sm mb-2">⚠ Zona de Perigo</h4>
                         <p class="text-xs text-gray-600 mb-3">Excluir o curso também remove todos os módulos, aulas e inscrições vinculadas.</p>
-                        <button onclick="return confirm('Tem certeza? Esta ação não pode ser desfeita.')"
-                            class="w-full bg-senai-red text-white text-xs font-bold py-2 rounded-lg hover:bg-red-700 transition">
-                            🗑 Excluir este curso
-                        </button>
+                        <?php if ($editando) { ?>
+                        <a href="curso_delete.php?id=<?php echo $editando['id']; ?>"
+                        onclick="return confirm('Tem certeza que deseja excluir este curso?')"
+                        class="bg-senai-red text-white text-xs px-3 py-2 rounded-md hover:bg-red-700 transition">
+                        🗑 Excluir curso
+                        </a>
+                        <?php } ?>
                     </div>
 
                 </div>

@@ -1,5 +1,5 @@
 <?php  
-
+session_start();
 // Incluir o arquivo de conexão com o banco
 require_once "includes/logado.php";
 require_once "includes/conexao.php";

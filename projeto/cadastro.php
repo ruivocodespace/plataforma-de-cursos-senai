@@ -13,7 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nome  = $_POST["nome"];
     $email = $_POST["email"];
     $senha = $_POST["senha"];
-    $senha = $_POST["senha"];
     $confirmar = $_POST["confirmar_senha"];
     $tipo = 'aluno';
 

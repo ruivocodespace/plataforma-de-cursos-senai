@@ -101,6 +101,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 }
+
+$modulos = [];
+
+if($editando){
+    $curso_id = $editando["id"];
+
+    $sqlModulos = "
+    SELECT 
+    m.id,
+    m.titulo,
+    COUNT(a.id) as total_aulas
+
+    FROM modulos m
+
+    LEFT JOIN aulas a
+    ON a.modulo_id = m.id
+
+    WHERE m.curso_id = $curso_id
+
+    GROUP BY m.id
+    ORDER BY m.id
+    ";
+
+    $resModulos = mysqli_query($conexao,$sqlModulos);
+
+    while($m = mysqli_fetch_assoc($resModulos)){
+        $modulos[] = $m;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -232,28 +261,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <!-- PAINEL LATERAL -->
                 <div class="space-y-4">
+                    <?php if($editando): ?>
+                    <div class="space-y-4">
+                        <div class="bg-white rounded-xl shadow-sm p-5">
+                            <h3 class="font-bold text-gray-700 text-sm mb-3">Módulos deste Curso</h3>
+                            <ul class="space-y-2 text-sm">
+                                <?php if(empty($modulos)): ?>
+                                    <p class="text-xs text-gray-400">Nenhum módulo cadastrado.</p>
+                                <?php else: ?>
 
-                    <!-- Módulos do curso -->
-                    <div class="bg-white rounded-xl shadow-sm p-5">
-                        <h3 class="font-bold text-gray-700 text-sm mb-3">Módulos deste Curso</h3>
-                        <ul class="space-y-2 text-sm">
-                            <li class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                                <span class="text-gray-700">1. Introdução ao HTML</span>
-                                <span class="text-xs text-gray-400">3 aulas</span>
-                            </li>
-                            <li class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                                <span class="text-gray-700">2. Estilizando com CSS</span>
-                                <span class="text-xs text-gray-400">3 aulas</span>
-                            </li>
-                            <li class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                                <span class="text-gray-700">3. Projeto Final</span>
-                                <span class="text-xs text-gray-400">3 aulas</span>
-                            </li>
-                        </ul>
-                        <a href="modulos.php" class="block mt-3 text-center border border-senai-blue text-senai-blue text-xs font-semibold py-2 rounded-lg hover:bg-blue-50 transition">
+                                <?php foreach($modulos as $m): ?>
+                                    <li class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                                        <span class="text-gray-700">
+                                            <?= $m["titulo"] ?>
+                                        </span>
+                                        <span class="text-xs text-gray-400">
+                                            <?= $m["total_aulas"] ?> aulas
+                                        </span>
+                                    </li>
+                                <?php endforeach; ?>
+                                <?php endif; ?>
+                            </ul>
+                            <a href="modulos.php?curso_id=<?=$editando['id']?>"
+                            class="block mt-3 text-center border border-senai-blue text-senai-blue text-xs font-semibold py-2 rounded-lg hover:bg-blue-50 transition">
                             Gerenciar Módulos
-                        </a>
+                            </a>
+                        </div>
                     </div>
+                    <?php endif; ?>
+                    
 
                     <!-- Dicas -->
                     <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">

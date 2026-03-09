@@ -15,13 +15,6 @@ if (isset($_GET["editar"])) {
     $res = mysqli_query($conexao, $sql);
     $editando = mysqli_fetch_assoc($res);
 }
-
-if (isset($_GET["excluir"])) {
-    $id = $_GET["excluir"];
-    $sql = "UPDATE aulas SET ativo = 0 WHERE id = '$id'";
-    $res = mysqli_query($conexao, $sql);
-}
-
 // Verificar se o formulário de cadastro foi enviado
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id = $_POST["id"];

@@ -66,13 +66,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $resultado_busca = mysqli_query($conexao, $sql_busca);
 
         if (mysqli_num_rows($resultado_busca) > 0) {
-
             $erro = "Já existe um curso cadastrado com este título.";
 
         } else {
 
             if ($id) {
-
                 // UPDATE
                 $sql_salvar = "UPDATE cursos SET 
                                titulo = '$titulo', 
@@ -82,19 +80,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                WHERE id = '$id'";
 
             } else {
-
                 // INSERT
                 $sql_salvar = "INSERT INTO cursos (titulo, descricao, capa, ativo) 
-                               VALUES ('$titulo', '$descricao', '$nome_capa', '$ativo')";
+                VALUES ('$titulo', '$descricao', '$nome_capa', '$ativo')";
             }
 
             if (mysqli_query($conexao, $sql_salvar)) {
-
                 header("Location: cursos.php");
                 exit;
 
             } else {
-
                 $erro = "Erro ao salvar no banco: " . mysqli_error($conexao);
 
             }

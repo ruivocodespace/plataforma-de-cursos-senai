@@ -6,8 +6,34 @@ require_once "../includes/conexao.php";
 
 $nome = $_SESSION["usuario_nome"];
 $email = $_SESSION["usuario_email"];
-?>
 
+// BUSCAR AULAS
+if(!isset($_GET["modulo_id"])){
+    header("Location: modulos.php");
+    exit;
+}
+
+$modulo_id = $_GET["modulo_id"];
+
+$sqlModulo = "
+SELECT m.*, c.titulo AS curso
+FROM modulos m
+INNER JOIN cursos c ON c.id = m.curso_id
+WHERE m.id = '$modulo_id'
+";
+
+$resultModulo = mysqli_query($conexao, $sqlModulo);
+$modulo = mysqli_fetch_assoc($resultModulo);
+
+$sqlAulas = "
+SELECT *
+FROM aulas
+WHERE modulo_id = '$modulo_id'
+ORDER BY ordem ASC
+";
+
+$resultAulas = mysqli_query($conexao, $sqlAulas);
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -44,63 +70,78 @@ $email = $_SESSION["usuario_email"];
                 <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
                     <a href="cursos.php" class="hover:text-senai-blue">Cursos</a> ›
                     <a href="modulos.php" class="hover:text-senai-blue">Módulos</a> ›
-                    <span class="text-gray-700 font-semibold">Introdução ao HTML</span> ›
+                    <span class="text-gray-700 font-semibold">
+                        <?php echo $modulo["titulo"]; ?>
+                    </span>
                     <span>Aulas</span>
                 </div>
                 <h1 class="text-xl font-extrabold text-gray-800">Gerenciar Aulas</h1>
             </div>
-            <a href="aula_form.php" class="bg-senai-green text-white font-bold px-4 py-2.5 rounded-lg text-sm hover:bg-green-600 transition">+ Nova Aula</a>
-        </div>
+            <a href="aula_form.php?modulo_id=<?php echo $modulo_id; ?>" 
+                class="bg-senai-green text-white font-bold px-4 py-2.5 rounded-lg text-sm hover:bg-green-600 transition">+ Nova Aula</a>
+            </div>
 
         <div class="p-6 flex-1">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                <!-- LISTA DE AULAS -->
-                <div class="space-y-3">
-                    <h2 class="font-bold text-gray-700 text-sm">Aulas do Módulo: Introdução ao HTML</h2>
+               <!-- LISTA DE MÓDULOS -->
+               <div class="space-y-3">
+                    
+               <?php if(mysqli_num_rows($resultAulas) == 0){
+                    ?>
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
+                        <p class="text-xs text-gray-400">Nenhuma aula cadastrada.</p>
+                    </div>
+                <?php }else{
+                    $index = 1;
+                    while($aula = mysqli_fetch_assoc($resultAulas)){
+                    ?>
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                                <?php echo $index; ?>
+                            </div>
 
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center gap-3">
-                        <div class="w-8 h-8 bg-senai-red/10 rounded-lg flex items-center justify-center text-senai-red text-sm flex-shrink-0">1</div>
-                        <div class="flex-1">
-                            <p class="font-semibold text-gray-800 text-sm">O que é HTML?</p>
-                            <p class="text-xs text-gray-400">⏱ 08:20 &nbsp;·&nbsp; <span class="text-blue-500 underline text-xs">ver vídeo</span></p>
-                        </div>
-                        <div class="flex gap-1.5">
-                            <a href="aula_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏ Editar</a>
-                            <button class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑</button>
+                            <div class="flex-1">
+                                <p class="font-semibold text-gray-800">
+                                    <?php echo $aula["titulo"]; ?>
+                                </p>
+
+                                <p class="text-xs text-gray-400">
+                                    <?php echo $aula["descricao"]; ?>
+                                </p>
+
+                                <p class="text-xs text-gray-400">
+                                    ⏱ <?php echo $aula["duracao"]; ?>
+                                </p>
+                            </div>
+                            <div class="flex gap-1.5">
+
+                                <a href="aula_form.php?editar=<?php echo $aula['id']; ?>" 
+                                class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">
+                                ✏ Editar
+                                </a>
+
+                                <a href="aula_delete.php?id=<?php echo $aula['id']; ?>&modulo_id=<?php echo $modulo_id; ?>" 
+                                class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md"
+                                onclick="return confirm('Deseja excluir esta aula?')">
+                                🗑 Excluir
+                                </a>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center gap-3">
-                        <div class="w-8 h-8 bg-senai-red/10 rounded-lg flex items-center justify-center text-senai-red text-sm flex-shrink-0">2</div>
-                        <div class="flex-1">
-                            <p class="font-semibold text-gray-800 text-sm">Estrutura básica de uma página</p>
-                            <p class="text-xs text-gray-400">⏱ 12:45 &nbsp;·&nbsp; <span class="text-blue-500 underline text-xs">ver vídeo</span></p>
-                        </div>
-                        <div class="flex gap-1.5">
-                            <a href="aula_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏ Editar</a>
-                            <button class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑</button>
-                        </div>
+                    <?php
+                    $index++;
+                    }
+                    }
+                    ?>
                     </div>
-
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center gap-3">
-                        <div class="w-8 h-8 bg-senai-red/10 rounded-lg flex items-center justify-center text-senai-red text-sm flex-shrink-0">3</div>
-                        <div class="flex-1">
-                            <p class="font-semibold text-gray-800 text-sm">Tags Essenciais do HTML</p>
-                            <p class="text-xs text-gray-400">⏱ 15:10 &nbsp;·&nbsp; <span class="text-blue-500 underline text-xs">ver vídeo</span></p>
-                        </div>
-                        <div class="flex gap-1.5">
-                            <a href="admin/aula_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏ Editar</a>
-                            <button class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑</button>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- FORMULÁRIO RÁPIDO DE AULA -->
                 <div class="bg-white rounded-xl shadow-sm p-5">
                     <h2 class="font-bold text-gray-700 text-sm mb-4">Adicionar Nova Aula</h2>
-                    <form action="admin/aula_form.php" method="post">
-                        <input type="hidden" name="modulo_id" value="1">
+                    <form action="aula_form.php" method="post">
+                        <input type="hidden" name="modulo_id" value="<?php echo $modulo_id; ?>">
                         <div class="mb-4">
                             <label class="form-label">Título da Aula *</label>
                             <input type="text" name="titulo" class="form-input" placeholder="Ex: Introdução às Tabelas HTML">

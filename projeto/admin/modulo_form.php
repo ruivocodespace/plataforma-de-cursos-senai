@@ -7,64 +7,51 @@ require_once "../includes/conexao.php";
 $sucesso = "";
 $erro = "";
 $editando = NULL;
+$id = "";
 
 
 if (isset($_GET["editar"])) {
     $id = $_GET["editar"];
-    $sql = "SELECT * FROM aulas WHERE id = '$id'";
+    $sql = "SELECT * FROM modulos WHERE id = '$id'";
     $res = mysqli_query($conexao, $sql);
     $editando = mysqli_fetch_assoc($res);
 }
 
 if (isset($_GET["excluir"])) {
     $id = $_GET["excluir"];
-    $sql = "UPDATE aulas SET ativo = 0 WHERE id = '$id'";
+    $sql = "DELETE FROM modulos WHERE id = '$id'";
     $res = mysqli_query($conexao, $sql);
 }
 
 // Verificar se o formulário de cadastro foi enviado
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id = $_POST["id"];
-    $modulo_id = $_POST["modulo_id"];
-    $titulo  = $_POST["titulo"];
-    $video_url = $_POST["video_url"];
-    $duracao = $_POST["duracao"];
+    $curso_id = $_POST["curso_id"];
+    $titulo = $_POST["titulo"];
     $descricao = $_POST["descricao"];
     $ordem = $_POST["ordem"];
 
-    $sql = "SELECT * FROM aulas WHERE titulo = '$titulo'";
-    $resultado = mysqli_query($conexao, $sql);
-
-    if (mysqli_num_rows($resultado) > 0 && !$editando) {
-        $erro = "Esta aula já está cadastrado.";
-    } else {
-        if($id) {
-            $sql = "UPDATE aulas SET
-            modulo_id = '$modulo_id',
-            titulo = '$titulo',
-            video_url = '$video_url',
-            duracao = '$duracao',
-            descricao = '$descricao',
-            ordem = '$ordem'
-            WHERE id = $id
-            ";
-            $sucesso = "Aula atualizada com sucesso!";
-
-            
-
-        }else{
-            $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO aulas (modulo_id, titulo, video_url, duracao, descricao, ordem) VALUES 
-            ('$modulo_id', '$titulo', '$video_url', '$duracao', '$descricao', '$ordem')";
-            $sucesso = "Aula cadastrada com sucesso!";
-            
+    if($id) {
+    $sql = "UPDATE modulos SET
+    curso_id = '$curso_id',
+    titulo = '$titulo',
+    descricao = '$descricao',
+    ordem = '$ordem'
+    WHERE id = $id";
+        $sucesso = "Módulo atualizado com sucesso!";
+    }else{
+        $sql = "INSERT INTO modulos (curso_id, titulo, descricao, ordem) VALUES 
+            ('$curso_id', '$titulo', '$descricao', '$ordem')";
         }
-
-        if (!mysqli_query($conexao, $sql)) {
-            $erro = "Erro ao cadastrar aula.";
-        }
+    if (!mysqli_query($conexao, $sql)) {
+        $erro = "Erro ao cadastrar módulo.";
     }
 }
+
+/* BUSCAR CURSOS */
+
+$sqlCursos = "SELECT * FROM cursos ORDER BY titulo";
+$resultadoCursos = mysqli_query($conexao,$sqlCursos);
 
 ?>
 <!DOCTYPE html>
@@ -106,26 +93,43 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
         <div class="p-6 flex-1 max-w-xl">
             <div class="bg-white rounded-xl shadow-sm p-6">
+                <!-- Mensagem de sucesso -->
+                <?php if (!empty($sucesso)): ?>
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                            <?php echo $sucesso; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Mensagem de erro -->
+                    <?php if (!empty($erro)): ?>
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                            <?php echo $erro; ?>
+                        </div>
+                    <?php endif; ?>
                 <form action="modulo_form.php" method="post">
-                    <input type="hidden" name="id" value="1">
+                    <input type="hidden" name="id" value="<?php echo $id; ?>">
                     <div class="mb-4">
                         <label class="form-label">Curso</label>
                         <select name="curso_id" class="form-input">
-                            <option value="1" selected>HTML e CSS do Zero</option>
-                            <option value="2">PHP para Iniciantes</option>
+                                <?php while($curso = mysqli_fetch_assoc($resultadoCursos)): ?>
+                            <option value="<?php echo $curso['id']; ?>"
+                                <?php if($editando && $editando['curso_id'] == $curso['id']) echo "selected"; ?>>
+                                <?php echo $curso['titulo']; ?>
+                            </option>
+                                <?php endwhile; ?>
                         </select>
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Título do Módulo *</label>
-                        <input type="text" name="titulo" class="form-input" value="Introdução ao HTML">
+                        <input type="text" name="titulo" class="form-input" value="<?= $editando ? $editando['titulo'] : '' ?>">
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Descrição (opcional)</label>
-                        <textarea name="descricao" rows="3" class="form-input resize-none">Fundamentos da linguagem HTML, estrutura de uma página e tags principais.</textarea>
+                        <textarea name="descricao" rows="3" class="form-input resize-none"><?= $editando ? $editando['descricao'] : '' ?></textarea>
                     </div>
                     <div class="mb-5">
                         <label class="form-label">Ordem</label>
-                        <input type="number" name="ordem" class="form-input" value="1" min="1">
+                        <input type="number" name="ordem" class="form-input" value="<?= $editando ? $editando['ordem'] : '' ?>" min="1">
                     </div>
                     <div class="flex gap-2">
                         <button type="submit" class="bg-senai-blue text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-senai-blue-dark transition">💾 Salvar</button>

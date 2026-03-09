@@ -40,14 +40,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             duracao = '$duracao',
             descricao = '$descricao',
             ordem = '$ordem'
-            WHERE id = $id
+            WHERE id = '$id'
             ";
             $sucesso = "Aula atualizada com sucesso!";
 
             
 
         }else{
-            $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
             $sql = "INSERT INTO aulas (modulo_id, titulo, video_url, duracao, descricao, ordem) VALUES 
             ('$modulo_id', '$titulo', '$video_url', '$duracao', '$descricao', '$ordem')";
             $sucesso = "Aula cadastrada com sucesso!";
@@ -59,6 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 }
+
+$sqlModulos = "SELECT * FROM modulos ORDER BY titulo";
+$resultadoModulos = mysqli_query($conexao, $sqlModulos);
 
 ?>
 
@@ -120,8 +122,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <div class="mb-4">
                         <label class="form-label">Módulo *</label>
                         <select name="modulo_id" class="form-input">
-                            <option value="1" selected>Módulo 1: Introdução ao HTML</option>
-                            <option value="2">Módulo 2: Estilizando com CSS</option>
+                            <?php while($modulo = mysqli_fetch_assoc($resultadoModulos)): ?>
+                                <option value="<?php echo $modulo['id']; ?>"
+                            <?php if($editando && $editando['modulo_id'] == $modulo['id']) echo "selected"; ?>>
+                            <?php echo $modulo['titulo']; ?>
+                                </option>
+                            <?php endwhile; ?>
                         </select>
                     </div>
                     <div class="mb-4">
@@ -139,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Descrição (opcional)</label>
-                        <textarea name="descricao" rows="4" class="form-input resize-none" value="<?=$editando['descricao'] ?? "" ?>"></textarea>
+                        <textarea name="descricao" rows="4" class="form-input resize-none"<?=$editando['descricao'] ?? "" ?>></textarea>
                     </div>
                     <div class="mb-5">
                         <label class="form-label">Ordem</label>

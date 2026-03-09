@@ -7,6 +7,33 @@ require_once "../includes/conexao.php";
 $nome = $_SESSION["usuario_nome"];
 $tipo = $_SESSION["usuario_tipo"];
 $email = $_SESSION["usuario_email"];
+
+$curso_id = 1;
+
+$sql = "SELECT * FROM modulos WHERE curso_id = $curso_id ORDER BY ordem ASC";
+$resultado = mysqli_query($conexao, $sql);
+
+$modulos = [];
+
+while ($row = mysqli_fetch_assoc($resultado)) {
+    $modulos[] = $row;
+}
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    $curso_id = $_POST["curso_id"];
+    $titulo = $_POST["titulo"];
+    $descricao = $_POST["descricao"];
+    $ordem = $_POST["ordem"];
+
+    $sql = "INSERT INTO modulos (curso_id, titulo, descricao, ordem)
+            VALUES ('$curso_id','$titulo','$descricao','$ordem')";
+
+    mysqli_query($conexao,$sql);
+
+    header("Location: modulos.php");
+    exit;
+}
 ?>
 
 
@@ -58,67 +85,36 @@ $email = $_SESSION["usuario_email"];
 
                 <!-- LISTA DE MÓDULOS -->
                 <div class="space-y-3">
-                    <h2 class="font-bold text-gray-700 text-sm">Módulos do Curso</h2>
-
-                    <!-- Módulo 1 -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">1</div>
-                            <div class="flex-1">
-                                <p class="font-semibold text-gray-800">Introdução ao HTML</p>
-                                <p class="text-xs text-gray-400">3 aulas cadastradas</p>
-                            </div>
-                            <div class="flex gap-1.5">
-                                <a href="aulas.php" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md">🎬 Aulas</a>
-                                <a href="modulo_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏</a>
-                                <button class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑</button>
-                            </div>
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded">↑ Subir</button>
-                            <button class="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded">↓ Descer</button>
-                        </div>
+                    
+                <?php if(empty($modulos)): ?>
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
+                        <p class="text-xs text-gray-400">Nenhum módulo cadastrado.</p>
                     </div>
 
-                    <!-- Módulo 2 -->
+                    <?php else: ?>
+                    <?php foreach($modulos as $index => $modulo): ?>
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
                         <div class="flex items-center gap-3 mb-3">
-                            <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">2</div>
+                            <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                                <?php echo $index + 1; ?>
+                            </div>
                             <div class="flex-1">
-                                <p class="font-semibold text-gray-800">Estilizando com CSS</p>
-                                <p class="text-xs text-gray-400">3 aulas cadastradas</p>
+                                <p class="font-semibold text-gray-800">
+                                    <?php echo $modulo["titulo"]; ?>
+                                </p>
+                                <p class="text-xs text-gray-400">
+                                    <?php echo $modulo["descricao"]; ?>
+                                </p>
                             </div>
                             <div class="flex gap-1.5">
-                                <a href="aulas.php" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md">🎬 Aulas</a>
-                                <a href="modulo_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏</a>
-                                <button class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑</button>
+                                <a href="aulas.php?modulo_id=<?php echo $modulo['id']; ?>" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md">🎬 Aulas</a>
+                                <a href="modulo_form.php?editar=<?php echo $modulo['id']; ?>" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏ Editar</a>
+                                <a href="modulo_excluir.php?id=<?php echo $modulo['id']; ?>" class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑 Excluir</a>
                             </div>
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded">↑ Subir</button>
-                            <button class="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded">↓ Descer</button>
                         </div>
                     </div>
-
-                    <!-- Módulo 3 -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">3</div>
-                            <div class="flex-1">
-                                <p class="font-semibold text-gray-800">Projeto Final</p>
-                                <p class="text-xs text-gray-400">3 aulas cadastradas</p>
-                            </div>
-                            <div class="flex gap-1.5">
-                                <a href="aulas.php" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md">🎬 Aulas</a>
-                                <a href="modulo_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏</a>
-                                <button class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑</button>
-                            </div>
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded">↑ Subir</button>
-                            <button class="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded">↓ Descer</button>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
 
                 <!-- FORMULÁRIO RÁPIDO -->

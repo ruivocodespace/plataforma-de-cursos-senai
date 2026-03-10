@@ -314,6 +314,5 @@ if($editando){
             </div>
         </div>
     </main>
-
 </body>
 </html>

@@ -168,11 +168,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         </div>
     </main>
-
-    <!-- FOOTER -->
-    <footer class="bg-senai-blue text-blue-200 text-center text-xs py-3">
-        SENAI — Sistema EAD &nbsp;|&nbsp; Todos os direitos reservados
-    </footer>
-
 </body>
 </html>

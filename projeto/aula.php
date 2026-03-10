@@ -225,6 +225,8 @@ $nome = $_SESSION["usuario_nome"];
         </main>
 
     </div>
+    <!-- FOOTER -->
+    <?php require_once("includes/footer.php");?>
 
 </body>
 </html>

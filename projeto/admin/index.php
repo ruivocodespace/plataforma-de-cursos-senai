@@ -219,6 +219,5 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
             </div>
         </div>
     </main>
-
 </body>
 </html>

@@ -211,9 +211,7 @@ $nome = $_SESSION["usuario_nome"];
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-gray-900 text-gray-400 text-center py-4 text-xs">
-        SENAI — Sistema EAD &nbsp;|&nbsp; © 2025 Todos os direitos reservados
-    </footer>
+    <?php require_once("includes/footer.php");?>
 
 </body>
 </html>

@@ -8,11 +8,14 @@ if (isset($_GET["id"])) {
 
     $id = intval($_GET["id"]);
 
-    // Soft delete (apenas desativa)
-    $sql = "DELETE FROM modulos WHERE id = '$id'";
-
+    $sql = "DELETE FROM modulos WHERE id = $id";
     mysqli_query($conexao, $sql);
-}
 
-header("Location: modulos.php");
-exit;
+    header("Location: modulos.php?sucesso=1");
+    exit;
+
+} else {
+
+    header("Location: modulos.php?erro=1");
+    exit;
+}

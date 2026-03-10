@@ -36,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }else{
         $sql = "INSERT INTO modulos (curso_id, titulo, descricao, ordem) VALUES 
             ('$curso_id', '$titulo', '$descricao', '$ordem')";
+            $sucesso = "Módulo cadastrado com sucesso!";
         }
     if (!mysqli_query($conexao, $sql)) {
         $erro = "Erro ao cadastrar módulo.";

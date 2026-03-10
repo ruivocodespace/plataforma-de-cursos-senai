@@ -4,6 +4,17 @@ session_start();
 require_once "../includes/logado.php";
 require_once "../includes/conexao.php";
 
+$sucesso = "";
+$erro = "";
+
+if(isset($_GET["sucesso"])){
+    $sucesso = "Módulo excluído com sucesso!";
+}
+
+if(isset($_GET["erro"])){
+    $erro = "Erro ao excluir módulo.";
+}
+
 $nome = $_SESSION["usuario_nome"];
 $tipo = $_SESSION["usuario_tipo"];
 $email = $_SESSION["usuario_email"];
@@ -120,6 +131,19 @@ while($row = mysqli_fetch_assoc($resultCursos)){
 
                 <!-- LISTA DE MÓDULOS -->
                 <div class="space-y-3">
+                    <!-- Mensagem de sucesso -->
+                    <?php if (!empty($sucesso)): ?>
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                            <?php echo $sucesso; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Mensagem de erro -->
+                    <?php if (!empty($erro)): ?>
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                            <?php echo $erro; ?>
+                        </div>
+                    <?php endif; ?>
                     
                 <?php if(empty($modulos)): ?>
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">

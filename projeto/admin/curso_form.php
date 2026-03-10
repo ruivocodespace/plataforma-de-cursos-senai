@@ -178,6 +178,19 @@ if($editando){
                 <!-- FORMULÁRIO PRINCIPAL -->
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-xl shadow-sm p-6">
+                        <!-- Mensagem de sucesso -->
+                <?php if (!empty($sucesso)): ?>
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                            <?php echo $sucesso; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Mensagem de erro -->
+                    <?php if (!empty($erro)): ?>
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                            <?php echo $erro; ?>
+                        </div>
+                    <?php endif; ?>
 
                         <form action="curso_form.php" method="post" enctype="multipart/form-data">
                             <!-- Campo oculto: id do curso (edição) -->

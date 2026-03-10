@@ -17,7 +17,6 @@ if (isset($_GET["editar"])) {
 }
 // Verificar se o formulário de cadastro foi enviado
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $id = $_POST["id"];
     $modulo_id = $_POST["modulo_id"];
     $titulo  = $_POST["titulo"];
     $video_url = $_POST["video_url"];
@@ -25,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $descricao = $_POST["descricao"];
     $ordem = $_POST["ordem"];
 
-    // Verificar se o email já existe
+    // Verificar se a aula já existe
     $sql = "SELECT * FROM aulas WHERE titulo = '$titulo'";
     $resultado = mysqli_query($conexao, $sql);
 
@@ -149,7 +148,7 @@ $resultadoModulos = mysqli_query($conexao, $sqlModulos);
                     </div>
                     <div class="mb-5">
                         <label class="form-label">Ordem</label>
-                        <input type="number" name="ordem" value="<?=$editando['ordem'] ?? "" ?>" class="form-input" value="3" min="1">
+                        <input type="number" name="ordem" value="<?=$editando['ordem'] ?? "" ?>" class="form-input" min="1">
                     </div>
                     <div class="flex gap-2">
                         <button type="submit" class="bg-senai-blue text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-senai-blue-dark transition">💾 Salvar Aula</button>

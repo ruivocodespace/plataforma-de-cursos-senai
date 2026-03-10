@@ -7,5 +7,9 @@ if (!isset($_SESSION["usuario_id"])) {
     exit;
 
 } 
+if ($_SESSION["usuario_tipo"] != "admin" ){
+    header("Location: login.php");
+    exit;
 
+}
 

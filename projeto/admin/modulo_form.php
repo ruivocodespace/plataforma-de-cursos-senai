@@ -17,12 +17,6 @@ if (isset($_GET["editar"])) {
     $editando = mysqli_fetch_assoc($res);
 }
 
-if (isset($_GET["excluir"])) {
-    $id = $_GET["excluir"];
-    $sql = "DELETE FROM modulos WHERE id = '$id'";
-    $res = mysqli_query($conexao, $sql);
-}
-
 // Verificar se o formulário de cadastro foi enviado
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id = $_POST["id"];

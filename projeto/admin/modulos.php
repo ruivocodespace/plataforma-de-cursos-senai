@@ -8,13 +8,21 @@ $nome = $_SESSION["usuario_nome"];
 $tipo = $_SESSION["usuario_tipo"];
 $email = $_SESSION["usuario_email"];
 
-$curso_id = 1;
+$curso_id = $_GET["curso_id"] ?? 0;
 
-$sql = "SELECT * FROM modulos WHERE curso_id = $curso_id ORDER BY ordem ASC";
-$resultado = mysqli_query($conexao, $sql);
+if($curso_id > 0){
+    $sql = "SELECT * FROM modulos WHERE curso_id = $curso_id ORDER BY ordem ASC";
+    $sqlCurso = "SELECT * FROM cursos WHERE id = $curso_id";
+    $resultCurso = mysqli_query($conexao,$sqlCurso);
+    $curso = mysqli_fetch_assoc($resultCurso);
+}else{
+    $sql = "SELECT * FROM modulos ORDER BY ordem ASC";
+    $curso = ["titulo" => "Todos os Cursos"];
+}
+
+$resultado = mysqli_query($conexao,$sql);
 
 $modulos = [];
-
 while ($row = mysqli_fetch_assoc($resultado)) {
     $modulos[] = $row;
 }
@@ -33,6 +41,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     header("Location: modulos.php");
     exit;
+}
+
+$sqlCursos = "SELECT id, titulo FROM cursos ORDER BY titulo ASC";
+$resultCursos = mysqli_query($conexao, $sqlCursos);
+
+$cursos = [];
+
+while($row = mysqli_fetch_assoc($resultCursos)){
+    $cursos[] = $row;
 }
 ?>
 
@@ -72,12 +89,30 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <div>
                 <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
                     <a href="cursos.php" class="hover:text-senai-blue">Cursos</a> ›
-                    <span class="text-gray-700 font-semibold">HTML e CSS do Zero</span> ›
+                    <span class="text-gray-700 font-semibold">
+                        <?php echo $curso["titulo"] ?? 'Todos os cursos'; ?>
+                    </span> ›
                     <span>Módulos</span>
                 </div>
                 <h1 class="text-xl font-extrabold text-gray-800">Gerenciar Módulos</h1>
             </div>
-            <a href="modulo_form.php" class="bg-senai-green text-white font-bold px-4 py-2.5 rounded-lg text-sm hover:bg-green-600 transition">+ Novo Módulo</a>
+            <div class="mt-2">
+            <select onchange="location = 'modulos.php?curso_id=' + this.value"
+                class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <option value="0">Todos os cursos</option>
+                <?php foreach($cursos as $c): ?>
+                    <option 
+                        value="<?php echo $c['id']; ?>"
+                        <?php if($curso_id == $c['id']) echo "selected"; ?>>
+                        <?php echo $c['titulo']; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            </div>
+            <a href="modulo_form.php?curso_id=<?php echo $curso_id; ?>" 
+                class="bg-senai-green text-white font-bold px-4 py-2.5 rounded-lg text-sm hover:bg-green-600 transition">
+                + Novo Módulo
+            </a>
         </div>
 
         <div class="p-6 flex-1">
@@ -109,7 +144,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <div class="flex gap-1.5">
                                 <a href="aulas.php?modulo_id=<?php echo $modulo['id']; ?>" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md">🎬 Aulas</a>
                                 <a href="modulo_form.php?editar=<?php echo $modulo['id']; ?>" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏ Editar</a>
-                                <a href="modulo_excluir.php?id=<?php echo $modulo['id']; ?>" class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑 Excluir</a>
+                                <a href="modulo_delete.php?id=<?php echo $modulo['id']; ?>" class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑 Excluir</a>
                             </div>
                         </div>
                     </div>
@@ -121,7 +156,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <div class="bg-white rounded-xl shadow-sm p-5">
                     <h2 class="font-bold text-gray-700 text-sm mb-4">Adicionar Novo Módulo</h2>
                     <form action="modulos.php" method="post">
-                        <input type="hidden" name="curso_id" value="1">
+                        <input type="hidden" name="curso_id" value="<?php echo $curso_id; ?>">
                         <div class="mb-4">
                             <label class="form-label">Título do Módulo *</label>
                             <input type="text" name="titulo" class="form-input" placeholder="Ex: Introdução ao HTML">

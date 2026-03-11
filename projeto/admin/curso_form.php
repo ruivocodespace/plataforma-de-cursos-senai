@@ -311,10 +311,12 @@ if($editando){
                     </div>
 
                     <!-- Aviso exclusão -->
+                    <?php if ($editando) { ?>                           
                     <div class="bg-red-50 border border-red-200 rounded-xl p-4">
                         <h4 class="font-bold text-senai-red text-sm mb-2">⚠ Zona de Perigo</h4>
                         <p class="text-xs text-gray-600 mb-3">Excluir o curso também remove todos os módulos, aulas e inscrições vinculadas.</p>
-                        <?php if ($editando) { ?>
+
+                
                         <a href="curso_delete.php?id=<?php echo $editando['id']; ?>"
                         onclick="return confirm('Tem certeza que deseja excluir este curso?')"
                         class="bg-senai-red text-white text-xs px-3 py-2 rounded-md hover:bg-red-700 transition">

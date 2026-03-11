@@ -1,6 +1,6 @@
 <?php
 
-require_once "includes/logado.php";
+//require_once "includes/logado.php";
 require_once "includes/conexao.php";
 
 
@@ -62,6 +62,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 ?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Cursos — EAD SENAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { senai: { red:'#C0392B', blue:'#34679A', 'blue-dark':'#2C5A85', orange:'#E67E22', green:'#27AE60' } } } }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col"></body>
 
     <main class="flex-1 flex flex-col">
             <!-- Mensagem de sucesso -->

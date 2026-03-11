@@ -10,8 +10,7 @@ require_once "../includes/conexao.php";
 $sql = "SELECT
 (SELECT COUNT(*) FROM cursos) AS cursos,
 (SELECT COUNT(*) FROM modulos) AS modulos,
-(SELECT COUNT(*) FROM aulas) AS aulas,
-(SELECT COUNT(*) FROM inscricoes) AS inscricoes
+(SELECT COUNT(*) FROM aulas) AS aulas
 ";
 
 $result = mysqli_query($conexao, $sql);
@@ -20,7 +19,6 @@ $totais = mysqli_fetch_assoc($result);
 $totalCursos = $totais['cursos'] ?? 0;
 $totalModulos = $totais['modulos'] ?? 0;
 $totalAulas = $totais['aulas'] ?? 0;
-$totalInscricoes = $totais['inscricoes'] ?? 0;
 
 
 // ==============================
@@ -85,7 +83,7 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
 
                 <script src="../includes/script.js"></script>
                 <script>
-                    // Chama a função que criamos anteriormente
+                    // Chama a função data
                     mostrarDataCompleta('data-texto');
                 </script>
             </div>

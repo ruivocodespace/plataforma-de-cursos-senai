@@ -1,28 +1,52 @@
-<?php  
+<?php 
+
 session_start();
-// Incluir o arquivo de conexão com o banco
-require_once "includes/logado.php";
-require_once "includes/conexao.php";
+require_once("includes/logado.php");
+require_once("includes/conexao.php");
 
-$nome = $_SESSION["usuario_nome"];
+$usuario_id = $_SESSION["usuario_id"];
 
-// Busca TODOS os cursos, modulos e aulas cadastrados
-$sql_cursos = "
+ //// TOTAIS DO SISTEMA ////
+$sql = "SELECT
+(SELECT COUNT(*) FROM cursos) AS cursos,
+(SELECT COUNT(*) FROM modulos) AS modulos,
+(SELECT COUNT(*) FROM aulas) AS aulas
+";
+
+$result = mysqli_query($conexao, $sql);
+$totais = mysqli_fetch_assoc($result);
+
+$totalCursos = $totais['cursos'] ?? 0;
+$totalModulos = $totais['modulos'] ?? 0;
+$totalAulas = $totais['aulas'] ?? 0;
+
+// BUSCAR CURSOS
+$sqlCursos = "
 SELECT 
-    c.*,
-    
-    (SELECT COUNT(*) 
-     FROM modulos m 
-     WHERE m.curso_id = c.id) AS total_modulos,
+c.id,
+c.titulo,
+c.descricao,
+c.capa,
 
-    (SELECT COUNT(*) 
-     FROM aulas a
-     JOIN modulos m ON m.id = a.modulo_id
-     WHERE m.curso_id = c.id) AS total_aulas
+COUNT(DISTINCT m.id) AS total_modulos,
+COUNT(DISTINCT a.id) AS total_aulas
 
 FROM cursos c
+
+LEFT JOIN modulos m 
+ON m.curso_id = c.id
+
+LEFT JOIN aulas a 
+ON a.modulo_id = m.id
+
+LEFT JOIN inscricoes i 
+ON i.curso_id = c.id
+
+GROUP BY c.id
+
 ORDER BY c.id DESC
 ";
+$resultCursos = mysqli_query($conexao, $sqlCursos);
 
 ?>
 <!DOCTYPE html>
@@ -73,47 +97,34 @@ ORDER BY c.id DESC
     </div> -->
 
     <!-- GRADE DE CURSOS -->
-    
-    <main class="max-w-6xl mx-auto px-6 py-8 flex-1"> 
+    <main class="max-w-6xl mx-auto px-6 py-8 flex-1">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <?php while ($curso = mysqli_fetch_assoc($resultado_cursos)): ?>
-            <?php
-            $usuario_id = $_SESSION["usuario_id"];
+            
+                    <!-- Lista de cusros -->
+                    <?php while ($u = mysqli_fetch_assoc($resultCursos)): ?>
+                    <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
+                            <div class="bg-gradient-to-br from-blue-500 to-blue-700 h-36 flex items-center justify-center overflow-hidden">
+                                <?php if (!empty($u["capa"])): ?>
+                                    <img src="uploads/capas/<?= $u["capa"] ?>"class="w-full h-full object-cover">
 
-            $sql_inscrito = "
-            SELECT id 
-            FROM inscricoes 
-            WHERE usuario_id = '$usuario_id'
-            AND curso_id = '".$curso["id"]."'
-            ";
+                                <?php else: ?>
+                                    <span class="text-white">Sem capa</span>
+                                <?php endif; ?>
 
-            $result_inscrito = mysqli_query($conexao,$sql_inscrito);
-
-            $inscrito = mysqli_num_rows($result_inscrito) > 0;
-            ?>
-
-            <!-- CURSO-->
-            <div class="bg-white rounded-xl shadow hover:shadow-md transition overflow-hidden flex flex-col border-2 border-green-400">
-                <div class="relative">
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-700 h-40 flex items-center justify-center">
-                        <span class="text-6xl">🌐</span>
+                                </div>
+                            <div class="p-5 flex flex-col flex-1">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-xs text-gray-400"><?= $totalModulos ?> · <?= $totalAulas ?></span>
+                                </div>
+                                <h3 class="font-bold text-gray-800 text-base mb-2"><?php echo $u["titulo"]; ?></h3>
+                                <p class="text-sm text-gray-500 mb-4 flex-1"><?php echo $u["descricao"]; ?></p>
+                                <a href="cadastro.php" class="bg-senai-blue text-white text-sm font-semibold py-2 rounded-lg text-center hover:bg-senai-blue-dark transition">
+                                    Inscrever-se Grátis
+                                </a>
+                            </div>
+                            
                     </div>
-
-                    <?php if($inscrito): ?>
-                        <span class="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                        ✓ Inscrito
-                        </span>
-                    <?php endif; ?>
-
-                </div>
-                <div class="p-5 flex flex-col flex-1">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-0.5 rounded"><?php echo $curso[$titulo];?></span>
-                        <span class="text-xs text-gray-400"><?php echo $curso[$total_modulos];?> módulos · <?php echo $curso[$total_aulas];?> aulas </span>
-                    </div>
-                    <h3 class="font-bold text-gray-800 text-base mb-2"><?php echo htmlspecialchars($curso["titulo"]); ?></h3>
-                    <p class="text-sm text-gray-500 mb-4 flex-1"><?php echo htmlspecialchars($curso["descricao"]);?></p>
-
+                    <?php endwhile; ?>
                     <!-- Progresso -->
                     <div class="mb-4">
                         <div class="flex justify-between text-xs text-gray-500 mb-1">
@@ -124,24 +135,12 @@ ORDER BY c.id DESC
                             <div class="bg-senai-green h-2 rounded-full" style="width:33%"></div>
                         </div>
                     </div>
-                    <?php if($inscrito): ?>
-                        <a href="curso.php?id=<?php echo $curso["id"]; ?>" 
-                        class="bg-senai-green text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-green-600 transition">
+                    <a href="curso.html" class="bg-senai-green text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-green-600 transition">
                         Continuar Curso →
-                        </a>
-                        <?php else: ?>
-
-                        <a href="inscrever.php?curso_id=<?php echo $curso["id"]; ?>" 
-                        class="bg-senai-blue text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-senai-blue-dark transition">
-                        Inscrever-se Grátis
-                        </a>
-                        <?php endif; ?>
+                    </a>
                 </div>
             </div>
-            <?php endwhile; ?>
         </div>
-        
-        
     </main>
 
     <!-- FOOTER -->

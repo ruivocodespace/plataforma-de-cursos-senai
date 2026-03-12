@@ -1,3 +1,50 @@
+<?php 
+
+require_once("includes/conexao.php");
+ //// TOTAIS DO SISTEMA ////
+$sql = "SELECT
+(SELECT COUNT(*) FROM cursos) AS cursos,
+(SELECT COUNT(*) FROM modulos) AS modulos,
+(SELECT COUNT(*) FROM aulas) AS aulas
+";
+
+$result = mysqli_query($conexao, $sql);
+$totais = mysqli_fetch_assoc($result);
+
+$totalCursos = $totais['cursos'] ?? 0;
+$totalModulos = $totais['modulos'] ?? 0;
+$totalAulas = $totais['aulas'] ?? 0;
+
+// BUSCAR CURSOS
+$sqlCursos = "
+SELECT 
+c.id,
+c.titulo,
+c.descricao,
+c.capa,
+
+COUNT(DISTINCT m.id) AS total_modulos,
+COUNT(DISTINCT a.id) AS total_aulas
+
+FROM cursos c
+
+LEFT JOIN modulos m 
+ON m.curso_id = c.id
+
+LEFT JOIN aulas a 
+ON a.modulo_id = m.id
+
+LEFT JOIN inscricoes i 
+ON i.curso_id = c.id
+
+GROUP BY c.id
+
+ORDER BY c.id DESC
+";
+$resultCursos = mysqli_query($conexao, $sqlCursos);
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -57,11 +104,11 @@
     <section class="bg-senai-blue-dark text-white py-6">
         <div class="max-w-4xl mx-auto px-6 grid grid-cols-3 gap-6 text-center">
             <div>
-                <p class="text-3xl font-extrabold text-yellow-400">3+</p>
+                <p class="text-3xl font-extrabold text-yellow-400"><?= $totalCursos ?></p>
                 <p class="text-sm text-blue-200 mt-1">Cursos disponíveis</p>
             </div>
             <div>
-                <p class="text-3xl font-extrabold text-yellow-400">15+</p>
+                <p class="text-3xl font-extrabold text-yellow-400"><?= $totalAulas ?></p>
                 <p class="text-sm text-blue-200 mt-1">Aulas em vídeo</p>
             </div>
             <div>
@@ -79,61 +126,34 @@
                 <p class="text-gray-500">Escolha um curso, inscreva-se e comece a aprender hoje mesmo.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Cards -->
+                 <!-- Lista de cusros -->
+                 <?php while ($u = mysqli_fetch_assoc($resultCursos)): ?>
+                    <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
 
-                <!-- Card 1 -->
-                <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-700 h-36 flex items-center justify-center">
-                        <span class="text-5xl">🌐</span>
-                    </div>
-                    <div class="p-5 flex flex-col flex-1">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-0.5 rounded">Front-end</span>
-                            <span class="text-xs text-gray-400">3 módulos · 9 aulas</span>
-                        </div>
-                        <h3 class="font-bold text-gray-800 text-base mb-2">HTML e CSS do Zero</h3>
-                        <p class="text-sm text-gray-500 mb-4 flex-1">Aprenda a criar páginas web profissionais do início ao fim, com projetos práticos.</p>
-                        <a href="cadastro.php" class="bg-senai-blue text-white text-sm font-semibold py-2 rounded-lg text-center hover:bg-senai-blue-dark transition">
-                            Inscrever-se Grátis
-                        </a>
-                    </div>
-                </div>
+                        
+                            <div class="bg-gradient-to-br from-blue-500 to-blue-700 h-36 flex items-center justify-center overflow-hidden">
+                                <?php if (!empty($u["capa"])): ?>
+                                    <img src="uploads/capas/<?= $u["capa"] ?>"class="w-full h-full object-cover">
 
-                <!-- Card 2 -->
-                <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-                    <div class="bg-gradient-to-br from-orange-400 to-red-500 h-36 flex items-center justify-center">
-                        <span class="text-5xl">🐘</span>
-                    </div>
-                    <div class="p-5 flex flex-col flex-1">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="bg-orange-100 text-orange-700 text-xs font-semibold px-2 py-0.5 rounded">Back-end</span>
-                            <span class="text-xs text-gray-400">2 módulos · 5 aulas</span>
-                        </div>
-                        <h3 class="font-bold text-gray-800 text-base mb-2">PHP para Iniciantes</h3>
-                        <p class="text-sm text-gray-500 mb-4 flex-1">Introdução ao desenvolvimento back-end com PHP e MySQL. Do zero ao primeiro sistema.</p>
-                        <a href="cadastro.php" class="bg-senai-blue text-white text-sm font-semibold py-2 rounded-lg text-center hover:bg-senai-blue-dark transition">
-                            Inscrever-se Grátis
-                        </a>
-                    </div>
-                </div>
+                                <?php else: ?>
+                                    <span class="text-white">Sem capa</span>
+                                <?php endif; ?>
 
-                <!-- Card 3 -->
-                <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-                    <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 h-36 flex items-center justify-center">
-                        <span class="text-5xl">⚡</span>
+                                </div>
+                            <div class="p-5 flex flex-col flex-1">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-xs text-gray-400"><?= $totalModulos ?> · <?= $totalAulas ?></span>
+                                </div>
+                                <h3 class="font-bold text-gray-800 text-base mb-2"><?php echo $u["titulo"]; ?></h3>
+                                <p class="text-sm text-gray-500 mb-4 flex-1"><?php echo $u["descricao"]; ?></p>
+                                <a href="cadastro.php" class="bg-senai-blue text-white text-sm font-semibold py-2 rounded-lg text-center hover:bg-senai-blue-dark transition">
+                                    Inscrever-se Grátis
+                                </a>
+                            </div>
+                            
                     </div>
-                    <div class="p-5 flex flex-col flex-1">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="bg-yellow-100 text-yellow-700 text-xs font-semibold px-2 py-0.5 rounded">Front-end</span>
-                            <span class="text-xs text-gray-400">4 módulos · 12 aulas</span>
-                        </div>
-                        <h3 class="font-bold text-gray-800 text-base mb-2">JavaScript Moderno (ES6+)</h3>
-                        <p class="text-sm text-gray-500 mb-4 flex-1">Domine os fundamentos e recursos modernos do JavaScript para a web.</p>
-                        <a href="cadastro.php" class="bg-senai-blue text-white text-sm font-semibold py-2 rounded-lg text-center hover:bg-senai-blue-dark transition">
-                            Inscrever-se Grátis
-                        </a>
-                    </div>
-                </div>
-
+                    <?php endwhile; ?>
             </div>
         </div>
     </section>

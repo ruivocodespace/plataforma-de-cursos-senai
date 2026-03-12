@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nome_capa = isset($editando['capa']) ? $editando['capa'] : "";
 
     // Caminho da pasta de uploads
-    $pasta_destino = "../uploads/cursos/";
+    $pasta_destino = "../uploads/capas/";
 
     // Verifica se foi enviada uma nova imagem
     if (isset($_FILES['capa']) && $_FILES['capa']['size'] > 0) {
@@ -227,7 +227,12 @@ if($editando){
                                 <div class="border-2 border-dashed border-gray-300 rounded-xl p-5 text-center hover:border-senai-blue transition cursor-pointer bg-gray-50">
                                     <!-- Preview da capa atual -->
                                     <div class="bg-gradient-to-br from-blue-500 to-blue-700 w-32 h-20 rounded-lg mx-auto mb-3 flex items-center justify-center">
-                                        <span class="text-3xl">🌐</span>
+                                        <span class="text-3xl" style="height: 100%;"><?php if ($editando["capa"]): ?>
+                                        <img style="height: 100%;" src="../uploads/capas/<?= $editando["capa"] ?>"
+                                            >
+                                <?php else: ?>
+                                    <span class="text-white">Sem capa</span>
+                                <?php endif; ?></span>
                                     </div>
                                     <p class="text-xs text-gray-500 mb-2">Capa atual. Clique para alterar.</p>
                                     <input type="file" name="capa" accept="image/*" class="hidden" id="input-capa">

@@ -162,7 +162,7 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
                                         <?= $porcentagem == 100 ? 'Concluído' : 'Em andamento' ?>
                                     </p>
                                 </div>
-                                <a href="curso.php?aula_id=<?= $u["id"] ?>" class="bg-senai-blue text-white text-xs font-bold px-5 py-2.5 rounded-lg hover:bg-senai-blue-dark transition flex-shrink-0">
+                                <a href="curso.php?id=<?= $curso['id'] ?>" class="bg-senai-blue text-white text-xs font-bold px-5 py-2.5 rounded-lg hover:bg-senai-blue-dark transition flex-shrink-0">
                                     Continuar →
                                 </a>
                             </div>

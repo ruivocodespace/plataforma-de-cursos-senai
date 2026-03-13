@@ -99,9 +99,51 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
     <!-- GRADE DE CURSOS -->
     <main class="max-w-6xl mx-auto px-6 py-8 flex-1">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
+
                     <!-- Lista de cusros -->
                     <?php while ($u = mysqli_fetch_assoc($resultCursos)): ?>
+                     <!-- LÓGICA DO USUARIO INCRITO -->
+                     <?php
+                        $usuario_id = $_SESSION["usuario_id"];
+                        $sql_inscrito = "
+                        SELECT id 
+                        FROM inscricoes 
+                        WHERE usuario_id = '$usuario_id'
+                        AND curso_id = '".$u["id"]."'
+                        ";
+                        $resultInscrito = mysqli_query($conexao,$sql_inscrito);
+                        
+                        $inscrito = mysqli_num_rows($resultInscrito) > 0;
+
+                        $sql_progresso = "
+                        SELECT 
+                        COUNT(DISTINCT a.id) AS total_aulas,
+                        COUNT(DISTINCT p.aula_id) AS aulas_concluidas
+
+                        FROM modulos m
+                        JOIN aulas a ON a.modulo_id = m.id
+
+                        LEFT JOIN progresso p 
+                        ON p.aula_id = a.id 
+                        AND p.usuario_id = '$usuario_id'
+
+                        WHERE m.curso_id = '".$u["id"]."'
+                        ";
+
+                        $resultProgresso = mysqli_query($conexao,$sql_progresso);
+                        $dados = mysqli_fetch_assoc($resultProgresso);
+
+                        $total = $dados["total_aulas"];
+                        $concluidas = $dados["aulas_concluidas"];
+
+                        $progresso = 0;
+
+                        if($total > 0){
+                            $progresso = ($concluidas / $total) * 100;
+                        }
+                        ?>
+                        
+
                     <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
                             <div class="bg-gradient-to-br from-blue-500 to-blue-700 h-36 flex items-center justify-center overflow-hidden">
                                 <?php if (!empty($u["capa"])): ?>
@@ -114,31 +156,40 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
                                 </div>
                             <div class="p-5 flex flex-col flex-1">
                                 <div class="flex items-center gap-2 mb-2">
-                                    <span class="text-xs text-gray-400"><?= $totalModulos ?> · <?= $totalAulas ?></span>
+                                    <span class="text-xs text-gray-400"><?= $u["total_modulos"] ?> módulos · <?= $u["total_aulas"] ?> aulas</span>
                                 </div>
                                 <h3 class="font-bold text-gray-800 text-base mb-2"><?php echo $u["titulo"]; ?></h3>
                                 <p class="text-sm text-gray-500 mb-4 flex-1"><?php echo $u["descricao"]; ?></p>
-                                <a href="cadastro.php" class="bg-senai-blue text-white text-sm font-semibold py-2 rounded-lg text-center hover:bg-senai-blue-dark transition">
-                                    Inscrever-se Grátis
-                                </a>
+
+                            <!-- Progresso -->
+                            <?php  if($inscrito): ?>
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs text-gray-500 mb-1">
+                                    <span>Seu progresso</span>
+                                    <span class="text-senai-green font-semibold">
+                                        <?= $concluidas ?> / <?= $total ?> aulas
+                                    </span>
+                                </div>
+
+                                <div class="bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: <?= $progresso ?>%"></div>
+                                </div>
                             </div>
                             
+                            <a href="curso.php?curso_id=<?= $u["id"] ?></a>" class="bg-senai-green text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-green-600 transition">
+                                Continuar Curso →
+                            </a>
+
+                            <?php else: ?>
+                            <a href="inscricao.php?curso_id=<?= $u["id"] ?>"class="bg-senai-blue text-white text-sm font-semibold py-2 rounded-lg text-center hover:bg-senai-blue-dark transition"
+                            onclick="return confirm('Tem certeza que deseja se inscrever neste curso?')"
+                            class="bg-senai-red text-white text-xs px-3 py-2 rounded-md hover:bg-red-700 transition">
+                                Inscrever-se Grátis
+                            </a>
+                            <?php endif; ?>
+                            </div>
                     </div>
                     <?php endwhile; ?>
-                    <!-- Progresso -->
-                    <div class="mb-4">
-                        <div class="flex justify-between text-xs text-gray-500 mb-1">
-                            <span>Seu progresso</span>
-                            <span class="text-senai-green font-semibold">3 / 9 aulas</span>
-                        </div>
-                        <div class="bg-gray-200 rounded-full h-2">
-                            <div class="bg-senai-green h-2 rounded-full" style="width:33%"></div>
-                        </div>
-                    </div>
-                    <a href="curso.html" class="bg-senai-green text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-green-600 transition">
-                        Continuar Curso →
-                    </a>
-                </div>
             </div>
         </div>
     </main>

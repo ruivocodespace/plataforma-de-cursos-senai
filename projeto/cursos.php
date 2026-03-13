@@ -182,7 +182,7 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
 
                             <?php else: ?>
                             <a href="inscricao.php?curso_id=<?= $u["id"] ?>"class="bg-senai-blue text-white text-sm font-semibold py-2 rounded-lg text-center hover:bg-senai-blue-dark transition"
-                            onclick="return confirm('Tem certeza que deseja se inscrever neste curso?')"
+                            onclick="return confirm('Tem certeza que deseja se inscrever este curso?')"
                             class="bg-senai-red text-white text-xs px-3 py-2 rounded-md hover:bg-red-700 transition">
                                 Inscrever-se Grátis
                             </a>

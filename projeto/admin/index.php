@@ -10,7 +10,8 @@ require_once "../includes/conexao.php";
 $sql = "SELECT
 (SELECT COUNT(*) FROM cursos) AS cursos,
 (SELECT COUNT(*) FROM modulos) AS modulos,
-(SELECT COUNT(*) FROM aulas) AS aulas
+(SELECT COUNT(*) FROM aulas) AS aulas,
+(SELECT COUNT(*) FROM inscricoes) AS inscricoes
 ";
 
 $result = mysqli_query($conexao, $sql);
@@ -19,6 +20,7 @@ $totais = mysqli_fetch_assoc($result);
 $totalCursos = $totais['cursos'] ?? 0;
 $totalModulos = $totais['modulos'] ?? 0;
 $totalAulas = $totais['aulas'] ?? 0;
+$totalInscricoes = $totais['inscricoes'] ?? 0;
 
 
 // ==============================

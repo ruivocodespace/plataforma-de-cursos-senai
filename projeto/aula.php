@@ -18,8 +18,17 @@ if (isset($_GET["id"])) {
 $sql_aula = "SELECT * FROM aulas WHERE id = $aula_id";
 $resultado_aula = mysqli_query($conexao, $sql_aula);
 $aula = mysqli_fetch_assoc($resultado_aula);
-
 $modulo_id = $aula['modulo_id'];
+
+function converterParaEmbed($url) {
+    if (empty($url)) return ""; // Se vier vazio, retorna vazio
+    
+    // Procura o ID do YouTube
+    preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i', $url, $match);
+    
+    // Se achar que é YouTube, monta o embed. Se não for (ex: Vimeo ou link já em embed), devolve como estava!
+    return isset($match[1]) ? "https://www.youtube.com/embed/" . $match[1] : $url;
+}
 
 // Pega os dados do Módulo desta aula
 $sql_modulo = "SELECT * FROM modulos WHERE id = $modulo_id";
@@ -200,8 +209,14 @@ $porcentagem = ($total_aulas_curso > 0) ? round(($aulas_concluidas / $total_aula
         <main class="flex-1 overflow-y-auto">
 
             <div class="bg-black aspect-video flex items-center justify-center max-h-96 lg:max-h-[550px] w-full relative">
-                <?php if(!empty($aula['video_url'])) { ?>
-                    <iframe src="<?= $aula['video_url'] ?>" class="w-full h-full absolute inset-0 border-0" allowfullscreen></iframe>
+                <?php 
+                // Garante que temos a variável convertida (usando a função que você colocou lá no topo do PHP)
+                $link_correto = converterParaEmbed($aula['video_url']);
+                
+                // Verifica se o link correto não está vazio
+                if(!empty($link_correto)) { 
+                ?>
+                    <iframe src="<?= $link_correto ?>" class="w-full h-full absolute inset-0 border-0" allowfullscreen></iframe>
                 <?php } else { ?>
                     <div class="text-center text-gray-500 p-8">
                         <div class="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">

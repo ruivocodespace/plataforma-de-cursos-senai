@@ -91,3 +91,20 @@ CREATE TABLE IF NOT EXISTS inscricoes (
     FOREIGN KEY (curso_id)   REFERENCES cursos(id)   ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ------------------------------------------------------------
+-- progresso
+-- Registra quais aulas o aluno já assistiu e marcou como concluídas
+-- Campos de uso        : usuario_id, aula_id, concluido, data_conclusao
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS progresso (
+    id             INT       NOT NULL AUTO_INCREMENT,
+    usuario_id     INT       NOT NULL,
+    aula_id        INT       NOT NULL,
+    concluido      TINYINT(1) NOT NULL DEFAULT 1,
+    data_conclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_progresso (usuario_id, aula_id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (aula_id)    REFERENCES aulas(id)    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+

@@ -1,22 +1,24 @@
-    <!-- SIDEBAR ADMIN -->
-    <aside class="w-56 bg-gray-900 min-h-screen flex flex-col flex-shrink-0">
-        <!-- Logo -->
-        <div class="px-4 py-5 border-b border-gray-700">
-            <p class="text-white font-extrabold text-base">🎓 EAD SENAI</p>
-            <p class="text-gray-500 text-xs mt-0.5">Painel Administrativo</p>
-        </div>
-        <!-- Info admin -->
-        <div class="px-4 py-3 border-b border-gray-700">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-xs font-bold">A</div>
+<!-- SIDEBAR ADMIN -->
+<aside class="w-56 bg-gray-900 min-h-screen flex flex-col flex-shrink-0">
+    <!-- Logo -->
+    <div class="px-4 py-5 border-b border-gray-700">
+        <p class="text-white font-extrabold text-base">🎓 EAD SENAI</p>
+        <p class="text-gray-500 text-xs mt-0.5">Painel Administrativo</p>
+    </div>
+
+    <!-- Info admin -->
+    <div class="px-4 py-3 border-b border-gray-700">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-xs font-bold">A</div>
                 <div>
                     <p class="text-white text-xs font-semibold"><?= htmlspecialchars($_SESSION["usuario_nome"]) ?></p>
                     <p class="text-gray-500 text-xs"><?= htmlspecialchars($_SESSION["usuario_email"]) ?></p>
                 </div>
             </div>
         </div>
-        <!-- Menu -->
-         <?php $paginaAtual = basename($_SERVER["PHP_SELF"]) ?>
+
+    <!-- Menu -->
+    <?php $paginaAtual = basename($_SERVER["PHP_SELF"]) ?>
         <nav class="flex-1 p-3 space-y-1">
             <a href="index.php"      class="nav-link <?php echo ($paginaAtual == 'index.php') ? 'active' : ''; ?>">📊 <span>Dashboard</span></a>
             <a href="cursos.php"     class="nav-link <?php echo ($paginaAtual == 'cursos.php') ? 'active' : ''; ?>">📚 <span>Cursos</span></a>
@@ -27,4 +29,4 @@
                 <a href="../index.php"       class="nav-link text-red-400 hover:text-red-300">🚪 <span>Sair</span></a>
             </div>
         </nav>
-    </aside>
+</aside>

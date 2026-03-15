@@ -3,64 +3,87 @@ session_start();
 require_once "../includes/logado_admin.php";
 require_once "../includes/conexao.php";
 
-// Variáveis para mensagens
+// Variáveis para mensagens e controle
 $sucesso = "";
 $erro = "";
-$editando = NULL;
+$editando = null;
+$id_edicao = null; // Variável dedicada para guardar o ID que estamos editando
 
-
+// 1. VERIFICA SE ESTAMOS ABRINDO A PÁGINA PARA EDITAR (GET)
 if (isset($_GET["editar"])) {
-    $id = $_GET["editar"];
-    $sql = "SELECT * FROM aulas WHERE id = '$id'";
+    $id_edicao = $_GET["editar"];
+    $sql = "SELECT * FROM aulas WHERE id = '$id_edicao'";
     $res = mysqli_query($conexao, $sql);
-    $editando = mysqli_fetch_assoc($res);
-}
-// Verificar se o formulário de cadastro foi enviado
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $modulo_id = $_POST["modulo_id"];
-    $titulo  = $_POST["titulo"];
-    $video_url = $_POST["video_url"];
-    $duracao = $_POST["duracao"];
-    $descricao = $_POST["descricao"];
-    $ordem = $_POST["ordem"];
-
-    // Verificar se a aula já existe
-    $sql = "SELECT * FROM aulas WHERE titulo = '$titulo'";
-    $resultado = mysqli_query($conexao, $sql);
-
-    if (mysqli_num_rows($resultado) > 0 && !$editando) {
-        $erro = "Esta aula já está cadastrado.";
+    
+    if (mysqli_num_rows($res) > 0) {
+        $editando = mysqli_fetch_assoc($res);
     } else {
-        if($id) {
+        $erro = "Aula não encontrada!";
+    }
+}
+
+// 2. VERIFICA SE O FORMULÁRIO FOI ENVIADO (POST)
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    
+    // Captura os dados do formulário
+    $id_post   = $_POST["id"]; // Pega o ID que veio escondido no form
+    $modulo_id = $_POST["modulo_id"];
+    $titulo    = $_POST["titulo"];
+    $video_url = $_POST["video_url"];
+    $duracao   = $_POST["duracao"];
+    $descricao = $_POST["descricao"];
+    $ordem     = $_POST["ordem"];
+
+    // Verifica se já existe OUTRA aula com este mesmo título
+    // Usa != para ignorar a própria aula que estamos editando
+    $sql_verifica = "SELECT * FROM aulas WHERE titulo = '$titulo' AND id != '$id_post'";
+    $resultado = mysqli_query($conexao, $sql_verifica);
+
+    if (mysqli_num_rows($resultado) > 0) {
+        $erro = "Já existe outra aula cadastrada com este título.";
+        
+        // Mantém os dados no formulário para o usuário não perder o que digitou
+        $editando = $_POST; 
+        $editando['id'] = $id_post; 
+
+    } else {
+        // Se tem ID no POST, faz UPDATE. Se não, faz INSERT.
+        if (!empty($id_post)) {
             $sql = "UPDATE aulas SET
-            modulo_id = '$modulo_id',
-            titulo = '$titulo',
-            video_url = '$video_url',
-            duracao = '$duracao',
-            descricao = '$descricao',
-            ordem = '$ordem'
-            WHERE id = '$id'
-            ";
+                    modulo_id = '$modulo_id',
+                    titulo = '$titulo',
+                    video_url = '$video_url',
+                    duracao = '$duracao',
+                    descricao = '$descricao',
+                    ordem = '$ordem'
+                    WHERE id = '$id_post'";
+            
             $sucesso = "Aula atualizada com sucesso!";
-
-            
-
-        }else{
+        } else {
             $sql = "INSERT INTO aulas (modulo_id, titulo, video_url, duracao, descricao, ordem) VALUES 
-            ('$modulo_id', '$titulo', '$video_url', '$duracao', '$descricao', '$ordem')";
-            $sucesso = "Aula cadastrada com sucesso!";
+                    ('$modulo_id', '$titulo', '$video_url', '$duracao', '$descricao', '$ordem')";
             
+            $sucesso = "Aula cadastrada com sucesso!";
         }
 
-        if (!mysqli_query($conexao, $sql)) {
-            $erro = "Erro ao cadastrar aula.";
+        // Executa a query
+        if (mysqli_query($conexao, $sql)) {
+            $sucesso;
+            
+            // Se foi UPDATE, busca os dados novos para atualizar a tela
+            if (!empty($id_post)) {
+                $res_novo = mysqli_query($conexao, "SELECT * FROM aulas WHERE id = '$id_post'");
+                $editando = mysqli_fetch_assoc($res_novo);
+            }
+        } else {
+            $erro = "Erro ao salvar aula no banco de dados.";
         }
     }
 }
 
+// Busca todos os módulos para popular o <select>
 $sqlModulos = "SELECT * FROM modulos ORDER BY titulo";
 $resultadoModulos = mysqli_query($conexao, $sqlModulos);
-
 ?>
 
 <!DOCTYPE html>
@@ -68,7 +91,7 @@ $resultadoModulos = mysqli_query($conexao, $sqlModulos);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Aula — Admin | EAD SENAI</title>
+    <title><?= ($editando) ? 'Editar' : 'Nova' ?> Aula — Admin | EAD SENAI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {

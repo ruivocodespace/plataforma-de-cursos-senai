@@ -88,14 +88,27 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
         </div>
     </div>
 
-    <!-- MENSAGEM DE SUCESSO (após inscrição) -->
-    <?php if(isset($_GET['sucesso'])): ?>
-    <div class="max-w-6xl mx-auto px-6 pt-5">
-        <div class="bg-green-50 border border-green-300 text-green-700 rounded-lg p-3 flex items-center gap-2 text-sm">
-            <span class="font-bold text-lg">✓</span>
-            <span>Inscrição realizada com sucesso! Acesse <a href="meus_cursos.php" class="underline font-semibold">Meus Cursos</a> para começar.</span>
+    <?php if (isset($_SESSION['msg_texto'])): ?>
+    <?php 
+    // Define as cores (usando classes do Tailwind CSS) e o ícone com base no tipo
+    if ($_SESSION['msg_tipo'] == 'sucesso') {
+        $cor_fundo = 'bg-green-100 border-green-500 text-green-800';
+        $icone = '✓';
+    }
+    ?>
+    
+    <div class="max-w-7xl mx-auto mt-6 px-4">
+        <div class="<?= $cor_fundo ?> border px-4 py-3 rounded-lg relative flex items-center gap-3 shadow-sm" role="alert">
+            <span class="text-xl font-bold"><?= $icone ?></span>
+            <span class="block sm:inline font-medium"><?= $_SESSION['msg_texto'] ?></span>
         </div>
     </div>
+    
+    <?php 
+    // APAGA as variáveis da sessão para a mensagem não ficar presa na tela no próximo F5
+    unset($_SESSION['msg_texto']);
+    unset($_SESSION['msg_tipo']);
+    ?>
     <?php endif; ?>
 
     <!-- GRADE DE CURSOS -->

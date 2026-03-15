@@ -163,7 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
 
             <p class="text-center text-xs text-gray-400 mt-5">
-                <a href="index.php" class="hover:text-senai-blue transition">← Voltar à página inicial</a>
+                <a href="../index.php" class="hover:text-senai-blue transition">← Voltar à página inicial</a>
             </p>
 
         </div>

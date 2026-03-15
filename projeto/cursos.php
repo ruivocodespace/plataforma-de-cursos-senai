@@ -88,13 +88,15 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
         </div>
     </div>
 
-    <!-- MENSAGEM DE SUCESSO (após inscrição) 
+    <!-- MENSAGEM DE SUCESSO (após inscrição) -->
+    <?php if(isset($_GET['sucesso'])): ?>
     <div class="max-w-6xl mx-auto px-6 pt-5">
         <div class="bg-green-50 border border-green-300 text-green-700 rounded-lg p-3 flex items-center gap-2 text-sm">
             <span class="font-bold text-lg">✓</span>
             <span>Inscrição realizada com sucesso! Acesse <a href="meus_cursos.php" class="underline font-semibold">Meus Cursos</a> para começar.</span>
         </div>
-    </div> -->
+    </div>
+    <?php endif; ?>
 
     <!-- GRADE DE CURSOS -->
     <main class="max-w-6xl mx-auto px-6 py-8 flex-1">
@@ -176,7 +178,7 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
                                 </div>
                             </div>
                             
-                            <a href="curso.php?curso_id=<?= $curso_id["id"] ?>" class="bg-senai-green text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-green-600 transition">
+                            <a href="curso.php?curso_id=<?= $u["id"] ?>" class="block bg-senai-green text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-green-600 transition">
                                 Continuar Curso →
                             </a>
 

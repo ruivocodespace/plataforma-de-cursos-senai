@@ -3,7 +3,6 @@ session_start();
 require_once("includes/logado.php");
 require_once("includes/conexao.php");
 
-// Convertemos para inteiro por segurança
 $usuario_id = (int) $_SESSION["usuario_id"];
 
 // 1. TOTAIS DO SISTEMA
@@ -162,7 +161,7 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
                                         <?= $porcentagem == 100 ? 'Concluído' : 'Em andamento' ?>
                                     </p>
                                 </div>
-                                <a href="curso.php?id=<?= $curso['id'] ?>" class="bg-senai-blue text-white text-xs font-bold px-5 py-2.5 rounded-lg hover:bg-senai-blue-dark transition flex-shrink-0">
+                                <a href="curso.php?curso_id=<?= $curso['id'] ?>" class="bg-senai-blue text-white text-xs font-bold px-5 py-2.5 rounded-lg hover:bg-senai-blue-dark transition flex-shrink-0">
                                     Continuar →
                                 </a>
                             </div>

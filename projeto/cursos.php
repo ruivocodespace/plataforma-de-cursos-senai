@@ -147,7 +147,7 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
                     <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
                             <div class="bg-gradient-to-br from-blue-500 to-blue-700 h-36 flex items-center justify-center overflow-hidden">
                                 <?php if (!empty($u["capa"])): ?>
-                                    <img src="uploads/capas/<?= $u["capa"] ?>"class="w-full h-full object-cover">
+                                    <img style="width: 100%; height: 100%; object-fit: cover;" src="uploads/capas/<?= $u["capa"] ?>">
 
                                 <?php else: ?>
                                     <span class="text-white">Sem capa</span>
@@ -176,7 +176,7 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
                                 </div>
                             </div>
                             
-                            <a href="curso.php?curso_id=<?= $u["id"] ?></a>" class="bg-senai-green text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-green-600 transition">
+                            <a href="curso.php?curso_id=<?= $curso_id["id"] ?>" class="bg-senai-green text-white text-sm font-semibold py-2.5 rounded-lg text-center hover:bg-green-600 transition">
                                 Continuar Curso →
                             </a>
 

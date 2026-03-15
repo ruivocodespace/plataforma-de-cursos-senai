@@ -227,23 +227,27 @@ if ($proximaAulaId === 0 && $totalAulas > 0) {
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sticky top-20">
                 <h4 class="font-bold text-gray-700 text-sm mb-3">Navegação do Curso</h4>
                 <ul class="space-y-1 text-xs">
-                    <li class="font-semibold text-senai-blue border-l-2 border-senai-blue pl-2">Módulo 1: Introdução ao HTML</li>
-                    <li class="text-senai-green pl-4">✓ O que é HTML?</li>
-                    <li class="text-senai-green pl-4">✓ Estrutura básica</li>
-                    <li class="text-senai-blue font-semibold pl-4">▶ Tags Essenciais</li>
-                    <li class="text-gray-400 mt-2">Módulo 2: Estilizando com CSS</li>
-                    <li class="text-gray-300 pl-4">○ Seletores CSS</li>
-                    <li class="text-gray-300 pl-4">○ Box Model</li>
-                    <li class="text-gray-300 pl-4">○ Flexbox</li>
-                    <li class="text-gray-400 mt-2">Módulo 3: Projeto Final</li>
-                    <li class="text-gray-300 pl-4">○ Aula 1</li>
-                    <li class="text-gray-300 pl-4">○ Aula 2</li>
-                    <li class="text-gray-300 pl-4">○ Aula 3</li>
+                    <?php 
+                    foreach ($modulosComAulas as $index => $modulo): 
+                        $numModulo = $index + 1;
+                    ?>
+                    <li class="font-semibold text-senai-blue border-l-2 border-senai-blue pl-2">Módulo <?= $numModulo ?>: <?= htmlspecialchars($modulo['titulo']) ?></li>
+                    <?php foreach ($modulo['aulas'] as $aula): ?>
+                            <?php if ($aula['concluido'] == 1): ?>
+                                <li class="text-senai-green pl-4 truncate">✓ <?= htmlspecialchars($aula['titulo']) ?></li>
+                            <?php else: ?>
+                                <li class="text-gray-500 pl-4 truncate">▶ <?= htmlspecialchars($aula['titulo']) ?></li>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                        
+                    <?php endforeach; ?>
                 </ul>
                 <hr class="my-3 border-gray-200">
-                <a href="aula.php" class="block bg-senai-blue text-white text-xs font-bold py-2 rounded-lg text-center hover:bg-senai-blue-dark transition">
+                <?php if ($proximaAulaId > 0): ?>
+                <a href="aula.php?id=<?= $proximaAulaId ?>" class="block bg-senai-blue text-white text-xs font-bold py-2 rounded-lg text-center hover:bg-senai-blue-dark transition">
                     ▶ Continuar Aula
                 </a>
+                <?php endif; ?>
             </div>
         </aside>
 

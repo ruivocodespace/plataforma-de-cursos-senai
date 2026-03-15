@@ -154,8 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <!-- INFO ADMIN -->
             <div class="mt-4 bg-yellow-50 border border-yellow-300 rounded-lg p-3 text-xs text-gray-600 text-center">
-                <strong>Admin?</strong> Use <span class="font-mono bg-white px-1 rounded">admin@ead.com</span> /
-                <span class="font-mono bg-white px-1 rounded">admin123</span> →
+                <strong>Admin?</strong> Use →
                 <a href="admin/login.php" class="text-senai-blue underline font-semibold">Painel Admin</a>
             </div>
 

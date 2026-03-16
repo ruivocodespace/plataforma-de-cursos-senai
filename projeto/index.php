@@ -1,7 +1,7 @@
-<?php 
+<?php
 
 require_once("includes/conexao.php");
- //// TOTAIS DO SISTEMA ////
+//// TOTAIS DO SISTEMA ////
 $sql = "SELECT
 (SELECT COUNT(*) FROM cursos) AS cursos,
 (SELECT COUNT(*) FROM modulos) AS modulos,
@@ -47,6 +47,7 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,14 +55,30 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            theme: { extend: { colors: { senai: { red:'#C0392B', blue:'#34679A', 'blue-dark':'#2C5A85', orange:'#E67E22', green:'#27AE60' } } } }
+            theme: {
+                extend: {
+                    colors: {
+                        senai: {
+                            red: '#C0392B',
+                            blue: '#34679A',
+                            'blue-dark': '#2C5A85',
+                            orange: '#E67E22',
+                            green: '#27AE60'
+                        }
+                    }
+                }
+            }
         }
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
+
 <body class="bg-white">
 
     <!-- NAVBAR -->
@@ -127,33 +144,33 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Cards -->
-                 <!-- Lista de cusros -->
-                 <?php while ($u = mysqli_fetch_assoc($resultCursos)): ?>
+                <!-- Lista de cusros -->
+                <?php while ($u = mysqli_fetch_assoc($resultCursos)): ?>
                     <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
 
-                        
-                            <div class="bg-gradient-to-br from-blue-500 to-blue-700 h-36 flex items-center justify-center overflow-hidden">
-                                <?php if (!empty($u["capa"])): ?>
-                                    <img src="uploads/capas/<?= $u["capa"] ?>"class="w-full h-full object-cover">
 
-                                <?php else: ?>
-                                    <span class="text-white">Sem capa</span>
-                                <?php endif; ?>
+                        <div class="bg-gradient-to-br from-blue-500 to-blue-700 h-36 flex items-center justify-center overflow-hidden">
+                            <?php if (!empty($u["capa"])): ?>
+                                <img src="uploads/capas/<?= $u["capa"] ?>" class="w-full h-full object-cover">
 
-                                </div>
-                            <div class="p-5 flex flex-col flex-1">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <span class="text-xs text-gray-400"><?= $totalModulos ?> · <?= $totalAulas ?></span>
-                                </div>
-                                <h3 class="font-bold text-gray-800 text-base mb-2"><?php echo $u["titulo"]; ?></h3>
-                                <p class="text-sm text-gray-500 mb-4 flex-1"><?php echo $u["descricao"]; ?></p>
-                                <a href="cadastro.php" class="bg-senai-blue text-white text-sm font-semibold py-2 rounded-lg text-center hover:bg-senai-blue-dark transition">
-                                    Inscrever-se Grátis
-                                </a>
+                            <?php else: ?>
+                                <span class="text-white">Sem capa</span>
+                            <?php endif; ?>
+
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-xs text-gray-400"><?= $totalModulos ?> · <?= $totalAulas ?></span>
                             </div>
-                            
+                            <h3 class="font-bold text-gray-800 text-base mb-2"><?php echo $u["titulo"]; ?></h3>
+                            <p class="text-sm text-gray-500 mb-4 flex-1"><?php echo $u["descricao"]; ?></p>
+                            <a href="cadastro.php" class="bg-senai-blue text-white text-sm font-semibold py-2 rounded-lg text-center hover:bg-senai-blue-dark transition">
+                                Inscrever-se Grátis
+                            </a>
+                        </div>
+
                     </div>
-                    <?php endwhile; ?>
+                <?php endwhile; ?>
             </div>
         </div>
     </section>
@@ -189,7 +206,8 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
     </section>
 
     <!-- FOOTER -->
-    <?php require_once("includes/footer.php");?>
+    <?php require_once("includes/footer.php"); ?>
 
 </body>
+
 </html>

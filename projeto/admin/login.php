@@ -30,13 +30,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["usuario_email"] = $usuario["email"];
             $_SESSION["usuario_tipo"] = $usuario["tipo"];
 
-            if($_SESSION["usuario_tipo"] !== 'admin'){
+            if ($_SESSION["usuario_tipo"] !== 'admin') {
                 $erro = 'Login não autorizado';
-            }else{
+            } else {
 
-            // Redirecionar para o dashboard
-            header("Location: index.php");
-            exit;
+                // Redirecionar para o dashboard
+                header("Location: index.php");
+                exit;
             }
         } else {
             $erro = "Email ou senha incorretos.";
@@ -49,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,14 +57,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            theme: { extend: { colors: { senai: { red:'#C0392B', blue:'#34679A', 'blue-dark':'#2C5A85', orange:'#E67E22', green:'#27AE60' } } } }
+            theme: {
+                extend: {
+                    colors: {
+                        senai: {
+                            red: '#C0392B',
+                            blue: '#34679A',
+                            'blue-dark': '#2C5A85',
+                            orange: '#E67E22',
+                            green: '#27AE60'
+                        }
+                    }
+                }
+            }
         }
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
+
 <body class="bg-gray-50 min-h-screen flex flex-col">
 
     <!-- NAVBAR MÍNIMA -->
@@ -97,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <div class="px-8 py-6">
 
                     <!-- Mensagem de sucesso -->
-                     <?php if (!empty($sucesso)): ?>
+                    <?php if (!empty($sucesso)): ?>
                         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
                             <?php echo $sucesso; ?>
                         </div>
@@ -120,8 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     name="email"
                                     type="email"
                                     placeholder="seu@email.com"
-                                    class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-blue focus:border-transparent"
-                                >
+                                    class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-blue focus:border-transparent">
                             </div>
                         </div>
 
@@ -133,8 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     name="senha"
                                     type="password"
                                     placeholder="••••••••"
-                                    class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-blue focus:border-transparent"
-                                >
+                                    class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-blue focus:border-transparent">
                             </div>
                         </div>
 
@@ -169,4 +184,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
     </main>
 </body>
+
 </html>

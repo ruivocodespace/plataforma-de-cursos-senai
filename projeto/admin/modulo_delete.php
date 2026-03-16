@@ -12,7 +12,6 @@ if (isset($_GET["id"])) {
 
     header("Location: modulos.php?sucesso=1");
     exit;
-
 } else {
 
     header("Location: modulos.php?erro=1");

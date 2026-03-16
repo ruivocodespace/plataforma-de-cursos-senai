@@ -14,7 +14,7 @@ if (isset($_GET["editar"])) {
     $id_edicao = $_GET["editar"];
     $sql = "SELECT * FROM aulas WHERE id = '$id_edicao'";
     $res = mysqli_query($conexao, $sql);
-    
+
     // Se encontrou a aula, guarda os dados em $editando para preencher o formulário. Se não, mostra erro.
     if (mysqli_num_rows($res) > 0) {
         $editando = mysqli_fetch_assoc($res);
@@ -25,7 +25,7 @@ if (isset($_GET["editar"])) {
 
 // Verifica se o formulário foi submetido via POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    
+
     // Captura os dados do formulário
     $id_post   = $_POST["id"]; // Pega o ID que veio escondido no form
     $modulo_id = $_POST["modulo_id"];
@@ -42,11 +42,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (mysqli_num_rows($resultado) > 0) {
         $erro = "Já existe outra aula cadastrada com este título.";
-        
-        // Mantém os dados no formulário para o usuário não perder o que digitou
-        $editando = $_POST; 
-        $editando['id'] = $id_post; 
 
+        // Mantém os dados no formulário para o usuário não perder o que digitou
+        $editando = $_POST;
+        $editando['id'] = $id_post;
     } else {
         // Se existe ID no POST, faz UPDATE. Se não, faz INSERT.
         if (!empty($id_post)) {
@@ -58,19 +57,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     descricao = '$descricao',
                     ordem = '$ordem'
                     WHERE id = '$id_post'";
-            
+
             $sucesso = "Aula atualizada com sucesso!";
         } else {
             $sql = "INSERT INTO aulas (modulo_id, titulo, video_url, duracao, descricao, ordem) VALUES 
                     ('$modulo_id', '$titulo', '$video_url', '$duracao', '$descricao', '$ordem')";
-            
+
             $sucesso = "Aula cadastrada com sucesso!";
         }
 
         // Executa a query
         if (mysqli_query($conexao, $sql)) {
             $sucesso;
-            
+
             // Se foi UPDATE, busca os dados novos para atualizar a tela
             if (!empty($id_post)) {
                 $res_novo = mysqli_query($conexao, "SELECT * FROM aulas WHERE id = '$id_post'");
@@ -90,6 +89,7 @@ $resultadoModulos = mysqli_query($conexao, $sqlModulos);
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -97,22 +97,80 @@ $resultadoModulos = mysqli_query($conexao, $sqlModulos);
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            theme: { extend: { colors: { senai: { red:'#C0392B', blue:'#34679A', 'blue-dark':'#2C5A85', orange:'#E67E22', green:'#27AE60' } } } }
+            theme: {
+                extend: {
+                    colors: {
+                        senai: {
+                            red: '#C0392B',
+                            blue: '#34679A',
+                            'blue-dark': '#2C5A85',
+                            orange: '#E67E22',
+                            green: '#27AE60'
+                        }
+                    }
+                }
+            }
         }
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .nav-link { display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:6px; font-size:13px; cursor:pointer; transition:background .15s; color:#cbd5e1; }
-        .nav-link:hover { background:rgba(255,255,255,.08); color:#fff; }
-        .nav-link.active { background:rgba(255,255,255,.15); color:#fff; font-weight:600; }
-        .form-input { width:100%; border:1px solid #d1d5db; border-radius:8px; padding:10px 14px; font-size:14px; outline:none; transition:border .15s; }
-        .form-input:focus { border-color:#34679A; box-shadow:0 0 0 3px rgba(52,103,154,.15); }
-        .form-label { display:block; font-size:12px; font-weight:600; color:#6b7280; margin-bottom:6px; text-transform:uppercase; letter-spacing:.05em; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background .15s;
+            color: #cbd5e1;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, .08);
+            color: #fff;
+        }
+
+        .nav-link.active {
+            background: rgba(255, 255, 255, .15);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 14px;
+            outline: none;
+            transition: border .15s;
+        }
+
+        .form-input:focus {
+            border-color: #34679A;
+            box-shadow: 0 0 0 3px rgba(52, 103, 154, .15);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
     </style>
 </head>
+
 <body class="bg-gray-100 min-h-screen flex">
-    
+
     <!--SIDEBAR + TOPBAR -->
     <?php
     require_once "includes/menu.php";
@@ -142,43 +200,43 @@ $resultadoModulos = mysqli_query($conexao, $sqlModulos);
             </div>
             <h1 class="text-xl font-extrabold text-gray-800">Editar Aula</h1>
         </div>
-        
+
         <!-- Formulário de cadastro/edição -->
         <div class="p-6 flex-1 max-w-xl">
             <div class="bg-white rounded-xl shadow-sm p-6">
                 <form action="aula_form.php" method="post">
-                <input type="hidden" value="<?=$editando['id'] ?? "" ?>" name="id"/>
+                    <input type="hidden" value="<?= $editando['id'] ?? "" ?>" name="id" />
                     <div class="mb-4">
                         <label class="form-label">Módulo *</label>
                         <select name="modulo_id" class="form-input">
-                            <?php while($modulo = mysqli_fetch_assoc($resultadoModulos)): ?>
+                            <?php while ($modulo = mysqli_fetch_assoc($resultadoModulos)): ?>
                                 <option value="<?php echo $modulo['id']; ?>"
-                            <?php if($editando && $editando['modulo_id'] == $modulo['id']) echo "selected"; ?>>
-                            <?php echo $modulo['titulo']; ?>
+                                    <?php if ($editando && $editando['modulo_id'] == $modulo['id']) echo "selected"; ?>>
+                                    <?php echo $modulo['titulo']; ?>
                                 </option>
                             <?php endwhile; ?>
                         </select>
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Título da Aula *</label>
-                        <input type="text" name="titulo" value="<?=$editando['titulo'] ?? "" ?>" class="form-input" value="Tags Essenciais do HTML">
+                        <input type="text" name="titulo" value="<?= $editando['titulo'] ?? "" ?>" class="form-input" value="Tags Essenciais do HTML">
                     </div>
                     <div class="mb-4">
                         <label class="form-label">URL do Vídeo (embed)</label>
-                        <input type="url" name="video_url" value="<?=$editando['video_url'] ?? "" ?>" class="form-input" value="https://www.youtube.com/embed/exemplo3" placeholder="https://www.youtube.com/embed/...">
+                        <input type="url" name="video_url" value="<?= $editando['video_url'] ?? "" ?>" class="form-input" value="https://www.youtube.com/embed/exemplo3" placeholder="https://www.youtube.com/embed/...">
                         <p class="text-xs text-gray-400 mt-1">Use a URL de incorporação do YouTube ou Vimeo.</p>
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Duração</label>
-                        <input type="text" name="duracao" value="<?=$editando['duracao'] ?? "" ?>" class="form-input" value="15:10" placeholder="Ex: 15:10">
+                        <input type="text" name="duracao" value="<?= $editando['duracao'] ?? "" ?>" class="form-input" value="15:10" placeholder="Ex: 15:10">
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Descrição (opcional)</label>
-                        <textarea name="descricao" rows="4" class="form-input resize-none"<?=$editando['descricao'] ?? "" ?>></textarea>
+                        <textarea name="descricao" rows="4" class="form-input resize-none" <?= $editando['descricao'] ?? "" ?>></textarea>
                     </div>
                     <div class="mb-5">
                         <label class="form-label">Ordem</label>
-                        <input type="number" name="ordem" value="<?=$editando['ordem'] ?? "" ?>" class="form-input" min="1">
+                        <input type="number" name="ordem" value="<?= $editando['ordem'] ?? "" ?>" class="form-input" min="1">
                     </div>
                     <div class="flex gap-2">
                         <button type="submit" class="bg-senai-blue text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-senai-blue-dark transition">💾 Salvar Aula</button>
@@ -189,4 +247,5 @@ $resultadoModulos = mysqli_query($conexao, $sqlModulos);
         </div>
     </main>
 </body>
+
 </html>

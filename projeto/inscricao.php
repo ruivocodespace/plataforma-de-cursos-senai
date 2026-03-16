@@ -15,21 +15,20 @@ WHERE usuario_id = '$usuario_id'
 AND curso_id = '$curso_id'
 ";
 
-$result = mysqli_query($conexao,$sql_verifica);
+$result = mysqli_query($conexao, $sql_verifica);
 
-if(mysqli_num_rows($result) == 0){
+if (mysqli_num_rows($result) == 0) {
     // Não está inscrito, faz o insert
     $sql = "
     INSERT INTO inscricoes (usuario_id, curso_id)
     VALUES ('$usuario_id','$curso_id')
     ";
-    
-    mysqli_query($conexao,$sql);
+
+    mysqli_query($conexao, $sql);
 
     // CRIA A MENSAGEM DE SUCESSO NA SESSÃO
     $_SESSION['msg_texto'] = "Inscrição realizada com sucesso! Bons estudos.";
-    $_SESSION['msg_tipo'] = "sucesso"; 
-
+    $_SESSION['msg_tipo'] = "sucesso";
 } else {
     // Já estava inscrito
     // CRIA A MENSAGEM DE AVISO NA SESSÃO

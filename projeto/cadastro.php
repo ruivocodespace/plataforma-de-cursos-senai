@@ -18,14 +18,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($senha !== $confirmar) {
         $erro = "As senhas não coincidem.";
-    }else{
+    } else {
         // Verificar se o email já existe
         $sql = "SELECT * FROM usuarios WHERE email = '$email'";
         $resultado = mysqli_query($conexao, $sql);
 
         if (mysqli_num_rows($resultado) > 0) {
             $erro = "Este email já está cadastrado.";
-        }else {
+        } else {
 
             $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
@@ -46,6 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,14 +54,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            theme: { extend: { colors: { senai: { red:'#C0392B', blue:'#34679A', 'blue-dark':'#2C5A85', orange:'#E67E22', green:'#27AE60' } } } }
+            theme: {
+                extend: {
+                    colors: {
+                        senai: {
+                            red: '#C0392B',
+                            blue: '#34679A',
+                            'blue-dark': '#2C5A85',
+                            orange: '#E67E22',
+                            green: '#27AE60'
+                        }
+                    }
+                }
+            }
         }
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
+
 <body class="bg-gray-50 min-h-screen flex flex-col">
 
     <!-- NAVBAR -->
@@ -77,112 +94,109 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <!-- CONTEÚDO -->
     <main class="flex-1 flex items-center justify-center px-4 py-12">
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
 
-                <!-- Topo -->
-                <div class="bg-senai-green px-8 py-6 text-center">
-                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span class="text-3xl">👤</span>
-                    </div>
-                    <h1 class="text-white font-extrabold text-xl">Criar sua Conta</h1>
-                    <p class="text-green-100 text-sm mt-1">Cadastre-se gratuitamente e comece a aprender</p>
+            <!-- Topo -->
+            <div class="bg-senai-green px-8 py-6 text-center">
+                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="text-3xl">👤</span>
                 </div>
-
-                <div class="px-8 py-6">
-
-                    <!-- Mensagem de sucesso -->
-                    <?php if (!empty($sucesso)): ?>
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-                            <?php echo $sucesso; ?>
-                        </div>
-                    <?php endif; ?>
-
-                    <!-- Mensagem de erro -->
-                    <?php if (!empty($erro)): ?>
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-                            <?php echo $erro; ?>
-                        </div>
-                    <?php endif; ?>
-                    <!-- FORMULÁRIO -->
-                    <form action="cadastro.php" method="post">
-
-                        <div class="mb-4">
-                            <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Nome Completo *</label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">👤</span>
-                                <input
-                                    name="nome"
-                                    type="text"
-                                    placeholder="João da Silva"
-                                    class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent"
-                                >
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">E-mail *</label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">✉</span>
-                                <input
-                                    name="email"
-                                    type="email"
-                                    placeholder="joao@email.com"
-                                    class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent"
-                                >
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Senha * <span class="text-gray-400 font-normal">(mínimo 6 caracteres)</span></label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔒</span>
-                                <input
-                                    name="senha"
-                                    type="password"
-                                    placeholder="••••••••"
-                                    class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent"
-                                >
-                            </div>
-                        </div>
-
-                        <div class="mb-6">
-                            <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                Confirmar Senha *
-                            </label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔒</span>
-                                <input
-                                    name="confirmar_senha"
-                                    type="password"
-                                    placeholder="Repita a senha"
-                                    class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent"
-                                >
-                            </div>
-                        </div>
-
-                        <button type="submit" class="w-full bg-senai-green hover:bg-green-600 text-white font-bold py-3 rounded-lg transition text-sm">
-                            Criar Minha Conta
-                        </button>
-                    </form>
-
-                    <div class="relative my-5">
-                        <div class="border-t border-gray-200"></div>
-                        <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-xs text-gray-400">ou</span>
-                    </div>
-
-                    <a href="login.php" class="block w-full border-2 border-senai-blue text-senai-blue font-bold py-2.5 rounded-lg text-sm text-center hover:bg-blue-50 transition">
-                        Já tenho conta — Fazer login
-                    </a>
-
-                </div>
-                <p class="text-center text-xs text-gray-400 mt-5">
-                    <a href="index.php" class="hover:text-senai-blue transition" style="margin: 10px;">← Voltar à página inicial</a>
-                </p>
+                <h1 class="text-white font-extrabold text-xl">Criar sua Conta</h1>
+                <p class="text-green-100 text-sm mt-1">Cadastre-se gratuitamente e comece a aprender</p>
             </div>
+
+            <div class="px-8 py-6">
+
+                <!-- Mensagem de sucesso -->
+                <?php if (!empty($sucesso)): ?>
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                        <?php echo $sucesso; ?>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Mensagem de erro -->
+                <?php if (!empty($erro)): ?>
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                        <?php echo $erro; ?>
+                    </div>
+                <?php endif; ?>
+                <!-- FORMULÁRIO -->
+                <form action="cadastro.php" method="post">
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Nome Completo *</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">👤</span>
+                            <input
+                                name="nome"
+                                type="text"
+                                placeholder="João da Silva"
+                                class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">E-mail *</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">✉</span>
+                            <input
+                                name="email"
+                                type="email"
+                                placeholder="joao@email.com"
+                                class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Senha * <span class="text-gray-400 font-normal">(mínimo 6 caracteres)</span></label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔒</span>
+                            <input
+                                name="senha"
+                                type="password"
+                                placeholder="••••••••"
+                                class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                            Confirmar Senha *
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔒</span>
+                            <input
+                                name="confirmar_senha"
+                                type="password"
+                                placeholder="Repita a senha"
+                                class="w-full border border-gray-300 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-senai-green focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-senai-green hover:bg-green-600 text-white font-bold py-3 rounded-lg transition text-sm">
+                        Criar Minha Conta
+                    </button>
+                </form>
+
+                <div class="relative my-5">
+                    <div class="border-t border-gray-200"></div>
+                    <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-xs text-gray-400">ou</span>
+                </div>
+
+                <a href="login.php" class="block w-full border-2 border-senai-blue text-senai-blue font-bold py-2.5 rounded-lg text-sm text-center hover:bg-blue-50 transition">
+                    Já tenho conta — Fazer login
+                </a>
+
+            </div>
+            <p class="text-center text-xs text-gray-400 mt-5">
+                <a href="index.php" class="hover:text-senai-blue transition" style="margin: 10px;">← Voltar à página inicial</a>
+            </p>
+        </div>
         </div>
     </main>
 
-    <?php require_once("includes/footer.php");?>
+    <?php require_once("includes/footer.php"); ?>
 
 </body>
+
 </html>

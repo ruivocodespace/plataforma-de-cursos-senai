@@ -1,4 +1,4 @@
-<?php  
+<?php
 session_start();
 require_once "../includes/logado_admin.php";
 require_once "../includes/conexao.php";
@@ -46,6 +46,7 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,17 +54,53 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            theme: { extend: { colors: { senai: { red:'#C0392B', blue:'#34679A', 'blue-dark':'#2C5A85', orange:'#E67E22', green:'#27AE60' } } } }
+            theme: {
+                extend: {
+                    colors: {
+                        senai: {
+                            red: '#C0392B',
+                            blue: '#34679A',
+                            'blue-dark': '#2C5A85',
+                            orange: '#E67E22',
+                            green: '#27AE60'
+                        }
+                    }
+                }
+            }
         }
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .nav-link { display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:6px; font-size:13px; cursor:pointer; transition:background .15s; color:#cbd5e1; }
-        .nav-link:hover { background:rgba(255,255,255,.08); color:#fff; }
-        .nav-link.active { background:rgba(255,255,255,.15); color:#fff; font-weight:600; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background .15s;
+            color: #cbd5e1;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, .08);
+            color: #fff;
+        }
+
+        .nav-link.active {
+            background: rgba(255, 255, 255, .15);
+            color: #fff;
+            font-weight: 600;
+        }
     </style>
 </head>
+
 <body class="bg-gray-100 min-h-screen flex">
 
     <!--SIDEBAR + TOPBAR -->
@@ -95,57 +132,57 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
         <div class="p-6 flex-1">
 
             <!-- CARDS DE TOTAIS -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
 
-            <!-- CURSOS -->
-            <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-blue">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-2xl">📚</span>
-                    <span class="text-xs text-gray-400 bg-blue-50 px-2 py-0.5 rounded">Total</span>
+                <!-- CURSOS -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-blue">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-2xl">📚</span>
+                        <span class="text-xs text-gray-400 bg-blue-50 px-2 py-0.5 rounded">Total</span>
+                    </div>
+                    <p class="text-3xl font-extrabold text-senai-blue">
+                        <?= $totalCursos ?>
+                    </p>
+                    <p class="text-sm text-gray-500 mt-1">Cursos cadastrados</p>
                 </div>
-                <p class="text-3xl font-extrabold text-senai-blue">
-                    <?= $totalCursos ?>
-                </p>
-                <p class="text-sm text-gray-500 mt-1">Cursos cadastrados</p>
-            </div>
 
-            <!-- MODULOS -->
-            <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-orange">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-2xl">📦</span>
-                    <span class="text-xs text-gray-400 bg-orange-50 px-2 py-0.5 rounded">Total</span>
+                <!-- MODULOS -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-orange">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-2xl">📦</span>
+                        <span class="text-xs text-gray-400 bg-orange-50 px-2 py-0.5 rounded">Total</span>
+                    </div>
+                    <p class="text-3xl font-extrabold text-senai-orange">
+                        <?= $totalModulos ?>
+                    </p>
+                    <p class="text-sm text-gray-500 mt-1">Módulos cadastrados</p>
                 </div>
-                <p class="text-3xl font-extrabold text-senai-orange">
-                    <?= $totalModulos ?>
-                </p>
-                <p class="text-sm text-gray-500 mt-1">Módulos cadastrados</p>
-            </div>
 
-            <!-- AULAS -->
-            <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-red">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-2xl">🎬</span>
-                    <span class="text-xs text-gray-400 bg-red-50 px-2 py-0.5 rounded">Total</span>
+                <!-- AULAS -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-red">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-2xl">🎬</span>
+                        <span class="text-xs text-gray-400 bg-red-50 px-2 py-0.5 rounded">Total</span>
+                    </div>
+                    <p class="text-3xl font-extrabold text-senai-red">
+                        <?= $totalAulas ?>
+                    </p>
+                    <p class="text-sm text-gray-500 mt-1">Aulas cadastradas</p>
                 </div>
-                <p class="text-3xl font-extrabold text-senai-red">
-                    <?= $totalAulas ?>
-                </p>
-                <p class="text-sm text-gray-500 mt-1">Aulas cadastradas</p>
-            </div>
 
-            <!-- INSCRIÇÕES -->
-            <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-green">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-2xl">👥</span>
-                    <span class="text-xs text-gray-400 bg-green-50 px-2 py-0.5 rounded">Total</span>
+                <!-- INSCRIÇÕES -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border-t-4 border-senai-green">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-2xl">👥</span>
+                        <span class="text-xs text-gray-400 bg-green-50 px-2 py-0.5 rounded">Total</span>
+                    </div>
+                    <p class="text-3xl font-extrabold text-senai-green">
+                        <?= $totalInscricoes ?>
+                    </p>
+                    <p class="text-sm text-gray-500 mt-1">Inscrições realizadas</p>
                 </div>
-                <p class="text-3xl font-extrabold text-senai-green">
-                    <?= $totalInscricoes ?>
-                </p>
-                <p class="text-sm text-gray-500 mt-1">Inscrições realizadas</p>
-            </div>
 
-        </div>
+            </div>
 
             <!-- AÇÕES RÁPIDAS + TABELA -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -200,19 +237,19 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
                                     <td class="px-4 py-3"><?php echo $u["titulo"]; ?></td>
                                     <td class="px-4 py-3"><?php echo $u["total_modulos"]; ?></td>
                                     <td class="px-4 py-3"><?php echo $u["total_aulas"]; ?></td>
-                                    <td class="px-4 py-3 text-center"><?php if($u["ativo"]): ?>
-                                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">
-                                        Ativo
-                                        </span>
+                                    <td class="px-4 py-3 text-center"><?php if ($u["ativo"]): ?>
+                                            <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">
+                                                Ativo
+                                            </span>
                                         <?php else: ?>
                                             <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">
-                                            Inativo
-                                        </span>
+                                                Inativo
+                                            </span>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
-                        
+
                         </tbody>
                     </table>
                 </div>
@@ -220,4 +257,5 @@ $resultCursos = mysqli_query($conexao, $sqlCursos);
         </div>
     </main>
 </body>
+
 </html>

@@ -1,8 +1,4 @@
 <?php
-// ============================================
-// Arquivo: conexao.php
-// Função: Conectar o PHP ao banco de dados MySQL
-// ============================================
 
 // Dados de conexão com o banco
 $servidor = "localhost";

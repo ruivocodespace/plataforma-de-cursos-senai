@@ -9,12 +9,13 @@ $erro = "";
 $editando = null;
 $id_edicao = null; // Variável dedicada para guardar o ID que estamos editando
 
-// 1. VERIFICA SE ESTAMOS ABRINDO A PÁGINA PARA EDITAR (GET)
+// Verifica se estamos editando uma aula (se veio ?editar=ID na URL)
 if (isset($_GET["editar"])) {
     $id_edicao = $_GET["editar"];
     $sql = "SELECT * FROM aulas WHERE id = '$id_edicao'";
     $res = mysqli_query($conexao, $sql);
     
+    // Se encontrou a aula, guarda os dados em $editando para preencher o formulário. Se não, mostra erro.
     if (mysqli_num_rows($res) > 0) {
         $editando = mysqli_fetch_assoc($res);
     } else {
@@ -22,7 +23,7 @@ if (isset($_GET["editar"])) {
     }
 }
 
-// 2. VERIFICA SE O FORMULÁRIO FOI ENVIADO (POST)
+// Verifica se o formulário foi submetido via POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
     // Captura os dados do formulário
@@ -47,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $editando['id'] = $id_post; 
 
     } else {
-        // Se tem ID no POST, faz UPDATE. Se não, faz INSERT.
+        // Se existe ID no POST, faz UPDATE. Se não, faz INSERT.
         if (!empty($id_post)) {
             $sql = "UPDATE aulas SET
                     modulo_id = '$modulo_id',
@@ -75,13 +76,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $res_novo = mysqli_query($conexao, "SELECT * FROM aulas WHERE id = '$id_post'");
                 $editando = mysqli_fetch_assoc($res_novo);
             }
+            // Se não mostra mensagem de erro
         } else {
             $erro = "Erro ao salvar aula no banco de dados.";
         }
     }
 }
 
-// Busca todos os módulos para popular o <select>
+// Busca todos os módulos com select para preencher o dropdown do formulário
 $sqlModulos = "SELECT * FROM modulos ORDER BY titulo";
 $resultadoModulos = mysqli_query($conexao, $sqlModulos);
 ?>
@@ -115,6 +117,7 @@ $resultadoModulos = mysqli_query($conexao, $sqlModulos);
     <?php
     require_once "includes/menu.php";
     ?>
+
     <main class="flex-1 flex flex-col">
         <!-- Mensagem de sucesso -->
         <?php if (!empty($sucesso)): ?>
@@ -129,6 +132,8 @@ $resultadoModulos = mysqli_query($conexao, $sqlModulos);
                 <?php echo $erro; ?>
             </div>
         <?php endif; ?>
+
+        <!-- Breadcrumbs e título -->
         <div class="bg-white border-b border-gray-200 px-6 py-4">
             <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
                 <a href="modulos.php" class="hover:text-senai-blue">Módulos</a> ›
@@ -137,6 +142,8 @@ $resultadoModulos = mysqli_query($conexao, $sqlModulos);
             </div>
             <h1 class="text-xl font-extrabold text-gray-800">Editar Aula</h1>
         </div>
+        
+        <!-- Formulário de cadastro/edição -->
         <div class="p-6 flex-1 max-w-xl">
             <div class="bg-white rounded-xl shadow-sm p-6">
                 <form action="aula_form.php" method="post">

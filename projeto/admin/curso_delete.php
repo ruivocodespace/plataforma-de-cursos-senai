@@ -1,10 +1,9 @@
 <?php
 session_start();
-
-session_start();
 require_once "../includes/logado_admin.php";
 require_once "../includes/conexao.php";
 
+// Verificar se o ID do curso foi fornecido
 if (isset($_GET["id"])) {
 
     $id = intval($_GET["id"]);
@@ -14,6 +13,6 @@ if (isset($_GET["id"])) {
 
     mysqli_query($conexao, $sql);
 }
-
+// Redirecionar de volta para a página de cursos
 header("Location: cursos.php");
 exit;

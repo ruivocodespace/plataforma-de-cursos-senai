@@ -64,6 +64,7 @@ $resultAulas = mysqli_query($conexao, $sqlAulas);
     require_once "includes/menu.php";
     ?>
 
+    <!-- CONTEÚDO PRINCIPAL -->
     <main class="flex-1 flex flex-col">
         <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
             <div>
@@ -82,17 +83,21 @@ $resultAulas = mysqli_query($conexao, $sqlAulas);
             </div>
 
         <div class="p-6 flex-1">
+
+            <!-- GRID DE MÓDULOS E FORMULÁRIO -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
                <!-- LISTA DE MÓDULOS -->
                <div class="space-y-3">
-                    
+                
+               <!-- AULAS -->                    
                <?php if(mysqli_num_rows($resultAulas) == 0){
                     ?>
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
                         <p class="text-xs text-gray-400">Nenhuma aula cadastrada.</p>
                     </div>
-                <?php }else{
+                
+                <?php } else {
                     $index = 1;
                     while($aula = mysqli_fetch_assoc($resultAulas)){
                     ?>
@@ -131,12 +136,13 @@ $resultAulas = mysqli_query($conexao, $sqlAulas);
                         </div>
                     </div>
 
-                    <?php
+                        <?php
                     $index++;
                     }
                     }
-                    ?>
-                    </div>
+                ?>
+                </div>
+                
                 <!-- FORMULÁRIO RÁPIDO DE AULA -->
                 <div class="bg-white rounded-xl shadow-sm p-5">
                     <h2 class="font-bold text-gray-700 text-sm mb-4">Adicionar Nova Aula</h2>

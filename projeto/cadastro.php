@@ -179,6 +179,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <a href="index.php" class="hover:text-senai-blue transition" style="margin: 10px;">← Voltar à página inicial</a>
                 </p>
             </div>
+
+            
+
         </div>
     </main>
 

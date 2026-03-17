@@ -1,4 +1,4 @@
-# Plataforma de Cursos EAD SENAI HTML, PHP + MySQL 🚀
+# Plataforma de Cursos EAD SENAI - HTML, PHP + MySQL 🚀
 
 > 🚧 Projeto em desenvolvimento – novas funcionalidades estão sendo implementadas continuamente.
 

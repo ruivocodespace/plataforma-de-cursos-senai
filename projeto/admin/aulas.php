@@ -177,7 +177,13 @@ $resultAulas = mysqli_query($conexao, $sqlAulas);
 
                                         <p class="text-xs text-gray-400">
                                             ⏱ <?php echo $aula["duracao"]; ?> &nbsp;·&nbsp;
-                                            <a href="<?php echo $aula['video_url']; ?>" class="text-blue-500 underline text-xs">ver vídeo</a>
+                                            <?php if ($aula && !empty($aula['video_url'])): ?>
+                                                <a href="<?php echo htmlspecialchars($aula['video_url']); ?>" target="_blank" class="text-blue-500 underline text-xs">
+                                                    ver vídeo
+                                                </a>
+                                            <?php else: ?>
+                                                <span class="text-gray-400 text-xs">Vídeo indisponível</span>
+                                            <?php endif; ?>
                                         </p>
                                     </div>
                                     <div class="flex gap-1.5">

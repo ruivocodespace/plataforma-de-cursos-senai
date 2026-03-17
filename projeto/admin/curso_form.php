@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // Pega extensão
         $extensao = strtolower(pathinfo($_FILES['capa']['name'], PATHINFO_EXTENSION));
-        $extensoes_permitidas = ['jpg','jpeg','png','webp'];
+        $extensoes_permitidas = ['jpg', 'jpeg', 'png', 'webp'];
 
         if (!in_array($extensao, $extensoes_permitidas)) {
             $erro = "Formato de imagem inválido.";
@@ -67,7 +67,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (mysqli_num_rows($resultado_busca) > 0) {
             $erro = "Já existe um curso cadastrado com este título.";
-
         } else {
 
             if ($id) {
@@ -78,7 +77,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                capa = '$nome_capa',
                                ativo = '$ativo'
                                WHERE id = '$id'";
-
             } else {
                 // INSERT
                 $sql_salvar = "INSERT INTO cursos (titulo, descricao, capa, ativo) 
@@ -88,10 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (mysqli_query($conexao, $sql_salvar)) {
                 header("Location: cursos.php");
                 exit;
-
             } else {
                 $erro = "Erro ao salvar no banco: " . mysqli_error($conexao);
-
             }
         }
     }
@@ -99,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 $modulos = [];
 
-if($editando){
+if ($editando) {
     $curso_id = $editando["id"];
 
     $sqlModulos = "
@@ -119,9 +115,9 @@ if($editando){
     ORDER BY m.id
     ";
 
-    $resModulos = mysqli_query($conexao,$sqlModulos);
+    $resModulos = mysqli_query($conexao, $sqlModulos);
 
-    while($m = mysqli_fetch_assoc($resModulos)){
+    while ($m = mysqli_fetch_assoc($resModulos)) {
         $modulos[] = $m;
     }
 }
@@ -129,6 +125,7 @@ if($editando){
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -136,20 +133,78 @@ if($editando){
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            theme: { extend: { colors: { senai: { red:'#C0392B', blue:'#34679A', 'blue-dark':'#2C5A85', orange:'#E67E22', green:'#27AE60' } } } }
+            theme: {
+                extend: {
+                    colors: {
+                        senai: {
+                            red: '#C0392B',
+                            blue: '#34679A',
+                            'blue-dark': '#2C5A85',
+                            orange: '#E67E22',
+                            green: '#27AE60'
+                        }
+                    }
+                }
+            }
         }
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .nav-link { display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:6px; font-size:13px; cursor:pointer; transition:background .15s; color:#cbd5e1; }
-        .nav-link:hover { background:rgba(255,255,255,.08); color:#fff; }
-        .nav-link.active { background:rgba(255,255,255,.15); color:#fff; font-weight:600; }
-        .form-input { width:100%; border:1px solid #d1d5db; border-radius:8px; padding:10px 14px; font-size:14px; outline:none; transition:border .15s, box-shadow .15s; }
-        .form-input:focus { border-color:#34679A; box-shadow: 0 0 0 3px rgba(52,103,154,.15); }
-        .form-label { display:block; font-size:12px; font-weight:600; color:#6b7280; margin-bottom:6px; text-transform:uppercase; letter-spacing:.05em; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background .15s;
+            color: #cbd5e1;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, .08);
+            color: #fff;
+        }
+
+        .nav-link.active {
+            background: rgba(255, 255, 255, .15);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 14px;
+            outline: none;
+            transition: border .15s, box-shadow .15s;
+        }
+
+        .form-input:focus {
+            border-color: #34679A;
+            box-shadow: 0 0 0 3px rgba(52, 103, 154, .15);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
     </style>
 </head>
+
 <body class="bg-gray-100 min-h-screen flex">
 
     <!--SIDEBAR -->
@@ -179,18 +234,18 @@ if($editando){
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-xl shadow-sm p-6">
                         <!-- Mensagem de sucesso -->
-                <?php if (!empty($sucesso)): ?>
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-                            <?php echo $sucesso; ?>
-                        </div>
-                    <?php endif; ?>
+                        <?php if (!empty($sucesso)): ?>
+                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                                <?php echo $sucesso; ?>
+                            </div>
+                        <?php endif; ?>
 
-                    <!-- Mensagem de erro -->
-                    <?php if (!empty($erro)): ?>
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-                            <?php echo $erro; ?>
-                        </div>
-                    <?php endif; ?>
+                        <!-- Mensagem de erro -->
+                        <?php if (!empty($erro)): ?>
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                                <?php echo $erro; ?>
+                            </div>
+                        <?php endif; ?>
 
                         <form action="curso_form.php" method="post" enctype="multipart/form-data">
                             <!-- Campo oculto: id do curso (edição) -->
@@ -204,8 +259,7 @@ if($editando){
                                     name="titulo"
                                     class="form-input"
                                     placeholder="Ex: HTML e CSS do Zero"
-                                    value="<?= $editando ? $editando['titulo'] : '' ?>"
-                                >
+                                    value="<?= $editando ? $editando['titulo'] : '' ?>">
                                 <p class="text-xs text-gray-400 mt-1">Use um título claro e direto. Máx. 150 caracteres.</p>
                             </div>
 
@@ -216,8 +270,7 @@ if($editando){
                                     name="descricao"
                                     rows="4"
                                     class="form-input resize-none"
-                                    placeholder="Descreva o curso, o que o aluno vai aprender..."
-                                ><?= $editando ? $editando['descricao'] : '' ?></textarea>
+                                    placeholder="Descreva o curso, o que o aluno vai aprender..."><?= $editando ? $editando['descricao'] : '' ?></textarea>
                                 <p class="text-xs text-gray-400 mt-1">Seja claro sobre o conteúdo e o público-alvo do curso.</p>
                             </div>
 
@@ -226,13 +279,12 @@ if($editando){
                                 <label class="form-label">Imagem de Capa</label>
                                 <div class="border-2 border-dashed border-gray-300 rounded-xl p-5 text-center hover:border-senai-blue transition cursor-pointer bg-gray-50">
                                     <!-- Preview da capa atual -->
-                                    <div class="bg-gradient-to-br from-blue-500 to-blue-700 w-32 h-20 rounded-lg mx-auto mb-3 flex items-center justify-center">
-                                        <span class="text-3xl" style="height: 100%;"><?php if ($editando["capa"]): ?>
-                                        <img style="height: 100%;" src="../uploads/capas/<?= $editando["capa"] ?>"
-                                            >
-                                <?php else: ?>
-                                    <span class="text-white">Sem capa</span>
-                                <?php endif; ?></span>
+                                    <div class="bg-gradient-to-br from-blue-500 to-blue-700 w-32 h-20 rounded-lg mx-auto mb-3 flex items-center justify-center overflow-hidden">
+                                        <?php if (isset($editando) && !empty($editando["capa"])): ?>
+                                            <img src="../uploads/capas/<?= htmlspecialchars($editando["capa"]) ?>" alt="Capa do Curso" class="w-full h-full object-cover">
+                                        <?php else: ?>
+                                            <span class="text-white text-sm font-medium">Sem capa</span>
+                                        <?php endif; ?>
                                     </div>
                                     <p class="text-xs text-gray-500 mb-2">Capa atual. Clique para alterar.</p>
                                     <input type="file" name="capa" accept="image/*" class="hidden" id="input-capa">
@@ -274,35 +326,35 @@ if($editando){
 
                 <!-- PAINEL LATERAL -->
                 <div class="space-y-4">
-                    <?php if($editando): ?>
-                    <div class="space-y-4">
-                        <div class="bg-white rounded-xl shadow-sm p-5">
-                            <h3 class="font-bold text-gray-700 text-sm mb-3">Módulos deste Curso</h3>
-                            <ul class="space-y-2 text-sm">
-                                <?php if(empty($modulos)): ?>
-                                    <p class="text-xs text-gray-400">Nenhum módulo cadastrado.</p>
-                                <?php else: ?>
+                    <?php if ($editando): ?>
+                        <div class="space-y-4">
+                            <div class="bg-white rounded-xl shadow-sm p-5">
+                                <h3 class="font-bold text-gray-700 text-sm mb-3">Módulos deste Curso</h3>
+                                <ul class="space-y-2 text-sm">
+                                    <?php if (empty($modulos)): ?>
+                                        <p class="text-xs text-gray-400">Nenhum módulo cadastrado.</p>
+                                    <?php else: ?>
 
-                                <?php foreach($modulos as $m): ?>
-                                    <li class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                                        <span class="text-gray-700">
-                                            <?= $m["titulo"] ?>
-                                        </span>
-                                        <span class="text-xs text-gray-400">
-                                            <?= $m["total_aulas"] ?> aulas
-                                        </span>
-                                    </li>
-                                <?php endforeach; ?>
-                                <?php endif; ?>
-                            </ul>
-                            <a href="modulos.php?curso_id=<?=$editando['id']?>"
-                            class="block mt-3 text-center border border-senai-blue text-senai-blue text-xs font-semibold py-2 rounded-lg hover:bg-blue-50 transition">
-                            Gerenciar Módulos
-                            </a>
+                                        <?php foreach ($modulos as $m): ?>
+                                            <li class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                                                <span class="text-gray-700">
+                                                    <?= $m["titulo"] ?>
+                                                </span>
+                                                <span class="text-xs text-gray-400">
+                                                    <?= $m["total_aulas"] ?> aulas
+                                                </span>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </ul>
+                                <a href="modulos.php?curso_id=<?= $editando['id'] ?>"
+                                    class="block mt-3 text-center border border-senai-blue text-senai-blue text-xs font-semibold py-2 rounded-lg hover:bg-blue-50 transition">
+                                    Gerenciar Módulos
+                                </a>
+                            </div>
                         </div>
-                    </div>
                     <?php endif; ?>
-                    
+
 
                     <!-- Dicas -->
                     <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
@@ -316,23 +368,24 @@ if($editando){
                     </div>
 
                     <!-- Aviso exclusão -->
-                    <?php if ($editando) { ?>                           
-                    <div class="bg-red-50 border border-red-200 rounded-xl p-4">
-                        <h4 class="font-bold text-senai-red text-sm mb-2">⚠ Zona de Perigo</h4>
-                        <p class="text-xs text-gray-600 mb-3">Excluir o curso também remove todos os módulos, aulas e inscrições vinculadas.</p>
+                    <?php if ($editando) { ?>
+                        <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+                            <h4 class="font-bold text-senai-red text-sm mb-2">⚠ Zona de Perigo</h4>
+                            <p class="text-xs text-gray-600 mb-3">Excluir o curso também remove todos os módulos, aulas e inscrições vinculadas.</p>
 
-                
-                        <a href="curso_delete.php?id=<?php echo $editando['id']; ?>"
-                        onclick="return confirm('Tem certeza que deseja excluir este curso?')"
-                        class="bg-senai-red text-white text-xs px-3 py-2 rounded-md hover:bg-red-700 transition">
-                        🗑 Excluir curso
-                        </a>
+
+                            <a href="curso_delete.php?id=<?php echo $editando['id']; ?>"
+                                onclick="return confirm('Tem certeza que deseja excluir este curso?')"
+                                class="bg-senai-red text-white text-xs px-3 py-2 rounded-md hover:bg-red-700 transition">
+                                🗑 Excluir curso
+                            </a>
                         <?php } ?>
-                    </div>
+                        </div>
 
                 </div>
             </div>
         </div>
     </main>
 </body>
+
 </html>
